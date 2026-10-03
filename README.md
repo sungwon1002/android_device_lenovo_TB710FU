@@ -1,5 +1,3 @@
-cd ~/evox/device/lenovo/TB710FU
-cat > README.md <<'EOF'
 # Lenovo Xiaoxin Pad Pro GT (TB710FU) — Evolution X device tree
 
 Unofficial device tree for building Evolution X 12.x (Android 17, branch `cnb`)
@@ -41,8 +39,8 @@ Changes from the TB520FU tree:
 
 | Path | Repository | Branch |
 |---|---|---|
-| `device/lenovo/TB710FU` | `YOUR_GITHUB_ID/android_device_lenovo_TB710FU` | `cnb` |
-| `vendor/lenovo/TB710FU` | `YOUR_GITHUB_ID/android_vendor_lenovo_TB710FU` | `cnb` |
+| `device/lenovo/TB710FU` | `sungwon1002/android_device_lenovo_TB710FU` | `cnb` |
+| `vendor/lenovo/TB710FU` | `sungwon1002/android_vendor_lenovo_TB710FU` | `cnb` |
 | `kernel/lenovo/TB710FU` | `wnduddld0513/android_kernel_lenovo_TB520FU` (used unchanged) | `seventeen` |
 
 The vendor repository holds the proprietary blobs plus the stock dtb, dtbo and
@@ -63,7 +61,7 @@ sudo apt install git-lfs && git lfs install
 mkdir evox && cd evox
 repo init -u https://github.com/Evolution-X/manifest -b cnb --git-lfs
 mkdir -p .repo/local_manifests
-curl -L https://raw.githubusercontent.com/YOUR_GITHUB_ID/android_device_lenovo_TB710FU/cnb/tools/local_manifest.xml \
+curl -L https://raw.githubusercontent.com/sungwon1002/android_device_lenovo_TB710FU/cnb/tools/local_manifest.xml \
   -o .repo/local_manifests/TB710FU.xml
 repo sync -c -j$(nproc) --force-sync --no-clone-bundle --no-tags
 repo forall vendor/lenovo/TB710FU -c git lfs pull
@@ -103,4 +101,3 @@ Do not relock the bootloader before a build is confirmed to boot.
 - [wnduddld0513](https://github.com/wnduddld0513) for the TB520FU tree and kernel
 - The LineageOS project
 - The Evolution X project
-EOF

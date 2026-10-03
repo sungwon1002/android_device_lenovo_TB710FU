@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-     Local manifest for building TB520FU on top of PixelOS (seventeen).
-     Copy to .repo/local_manifests/TB520FU.xml, then `repo sync`.
+     Local manifest for building TB710FU on top of Evolution X (cnb).
+     Copy to .repo/local_manifests/TB710FU.xml, then `repo sync`.
 -->
 <manifest>
+  <remote name="tb710fu" fetch="https://github.com/sungwon1002" revision="cnb" />
   <remote name="tb520fu" fetch="https://github.com/wnduddld0513" revision="seventeen" />
 
-  <project name="android_device_lenovo_TB520FU" path="device/lenovo/TB520FU" remote="tb520fu" />
-  <project name="android_kernel_lenovo_TB520FU" path="kernel/lenovo/TB520FU" remote="tb520fu" />
-  <project name="android_vendor_lenovo_TB520FU" path="vendor/lenovo/TB520FU" remote="tb520fu" />
-  <!-- Optional: leave out for a plain PixelOS build without the maintainer
-       customizations (Lenovo Notes, game performance, Play Store identity,
-       OTA updater, Feathers wallpaper). -->
-  <project name="android_vendor_lenovo_TB520FU-custom" path="vendor/lenovo/TB520FU-custom" remote="tb520fu" />
+  <project name="android_device_lenovo_TB710FU" path="device/lenovo/TB710FU" remote="tb710fu" />
+  <project name="android_vendor_lenovo_TB710FU" path="vendor/lenovo/TB710FU" remote="tb710fu" />
+  <project name="android_kernel_lenovo_TB520FU" path="kernel/lenovo/TB710FU" remote="tb520fu" />
 </manifest>
