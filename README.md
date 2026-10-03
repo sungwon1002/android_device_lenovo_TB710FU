@@ -1,173 +1,85 @@
-# Lenovo Yoga Tab Plus (TB710FU) — PixelOS device tree
+cd ~/evox/device/lenovo/TB710FU
+cat > README.md <<'EOF'
+# Lenovo Xiaoxin Pad Pro GT (TB710FU) — Evolution X device tree
 
-Unofficial device tree for building PixelOS (Android 17, `seventeen`) for the
-Lenovo Yoga Tab Plus / YOGA Pad Pro (TB710FU, Qualcomm Snapdragon 8 Gen 3).
+Unofficial device tree for building Evolution X 12.x (Android 17, branch `cnb`)
+for the Lenovo Xiaoxin Pad Pro GT / Yoga Tab 11.1 AI (TB710FU, Snapdragon 8 Gen 3).
+
+> **Status: work in progress. Boot has not been verified yet.**
+> Do not flash builds from this tree unless you can restore the stock firmware.
 
 | | |
 |---|---|
 | SoC | Qualcomm SM8650 (pineapple) |
-| Kernel | GKI `6.1.138-android14-11`, built from source |
-| Display | 2944×1840 dual-DSI, natively landscape, density 340 |
-| Stock firmware | `ZUI_17.5.10.362_260719_ROW` |
-| Shipping API | 34 |
+| Kernel | GKI `android14-6.1` (KMI 11), built from source |
+| Display | NT36532 dual-DSI DSC, 3200×2000, `ORIENTATION_270` (reported as 2000×3200), density 400, 30/60/90/120/144 Hz |
+| Touch | Novatek NVT-ts (SPI), pen support |
+| Audio amp | Awinic aw882xx |
+| Stock firmware | `TB710FU_CN_OPEN_USER_Q00019.0_A16_ZUXOS_1.5.04.470_ST_260625` (PRC) |
+| Board API level | 34 |
+| Super partition | 20401094656 bytes (group 19318964224) |
 
-Status: used daily. SELinux enforcing, dm-verity on, and the bootloader can be
-relocked (see "Verified boot"). Widevine L1 (Netflix HD), Play Integrity
-BASIC.
+## Based on
 
-## Downloads
+This tree is a port of the TB520FU (Lenovo Yoga Tab Plus) tree by
+[wnduddld0513](https://github.com/wnduddld0513/android_device_lenovo_TB520FU),
+which is itself based on the LineageOS OnePlus Pad 2 (`caihong`) and
+`oneplus/sm8650-common` trees. Copyright headers of the original files are kept.
 
-Latest build: see [Releases](https://github.com/wnduddld0513/android_device_lenovo_TB710FU/releases/),
-installation steps in the release notes. Files are on
-[SourceForge](https://sourceforge.net/projects/pixelos-unofficial-tb520fu/files/seventeen/).
-Pick the region of your device: ROW and PRC only differ in the device tree
-(dtb) and the signed images that carry it.
+Changes from the TB520FU tree:
 
-The `.zip` installs from TWRP or the PixelOS recovery; the `ltbox_*.7z` is a
-firmware package for LTBox (EDL). Both keep the user data when updating an
-installed build; coming from the stock firmware or another ROM, format data.
-Installed builds that include the optional customizations also update
-themselves (Settings > System > System update).
+- Display: density 400, boot animation size 2000×3200, `ORIENTATION_270`.
+- Touch firmware: single `novatek_ts_fw.bin` instead of BOE/Tianma variants.
+- Blobs: TB520FU-only panel, sensor, camera (kirby/lapis) and Goodix fingerprint
+  files removed; TB710FU (topaz) display, sensor and camera files added.
+- `init/`: replaced with the TB710FU stock versions; `fstab.qcom` without `lenovocust`.
+- Super partition and group size set to the TB710FU values.
+- Lenovo props: `project=topaz`, market name, `not_support_vibrator=true`.
+- Product makefile `lineage_TB710FU.mk` for Evolution X; PixelOS-only `DolbyAtmos` removed.
 
 ## Repositories
 
-| Path | Repository | Contents |
+| Path | Repository | Branch |
 |---|---|---|
-| `device/lenovo/TB710FU` | `android_device_lenovo_TB710FU` | this tree |
-| `kernel/lenovo/TB710FU` | `android_kernel_lenovo_TB710FU` | Android common kernel `android14-6.1` at `2ecae636cf9b` (the source of the stock GKI kernel) plus the Qualcomm UAPI headers |
-| `vendor/lenovo/TB710FU` | `android_vendor_lenovo_TB710FU` | proprietary blobs, plus the stock vendor kernel modules, dtb and dtbo in `kernel/` (Git LFS for files over 50 MB) |
-| `vendor/lenovo/TB710FU-custom` | `android_vendor_lenovo_TB710FU-custom` | optional customizations, see below |
+| `device/lenovo/TB710FU` | `YOUR_GITHUB_ID/android_device_lenovo_TB710FU` | `cnb` |
+| `vendor/lenovo/TB710FU` | `YOUR_GITHUB_ID/android_vendor_lenovo_TB710FU` | `cnb` |
+| `kernel/lenovo/TB710FU` | `wnduddld0513/android_kernel_lenovo_TB520FU` (used unchanged) | `seventeen` |
 
-`vendor/lenovo/TB710FU-custom` is optional. It holds the maintainer
-additions on top of PixelOS - Lenovo Notes, the per-app game performance
-profiles, the Play Integrity Fix switch, the OTA
-updater with its publishing tools and the default live wallpaper - with
-their app ("Custom features"), overlays, blobs, patches and a small
-system_server extension. Without it this tree builds a plain PixelOS for
-the device: no such app, no updater, no game performance enforcement and
-the device tree's own TB710FUParts (Lenovo features) as the only settings
-app. `patches/apply.sh` reverts the repository's patches automatically when
-it is removed.
-
-`tools/local_manifest.xml` lists them; `lineage.dependencies` does the same
-for roomservice.
+The vendor repository holds the proprietary blobs plus the stock dtb, dtbo and
+vendor kernel modules in `kernel/`. Two files are stored with Git LFS.
 
 ## Kernel
 
-The stock firmware runs Google's GKI build of `android14-6.1`
-(`6.1.138-android14-11-g2ecae636cf9b-ab14676408`). This tree builds the same
-source with `gki_defconfig` (clang r547379; GKI uses r487747c, newer clang
-fails on this kernel). The 60 GKI modules go to system_dlkm, signed with a
-key generated for each build. Lenovo/Qualcomm only ship the vendor modules
-(vendor_boot, vendor_dlkm, all unsigned) and the device trees; their source
-is not published at this version, so they come from the stock firmware
-(`vendor/lenovo/TB710FU/kernel/`). Only `android14-6.1` updates keep working
-with them (stable KMI).
-
-Source: [kernel/common](https://android.googlesource.com/kernel/common/+/2ecae636cf9be43fdfe04adb25b2c2987838955a),
-Lenovo's release: https://support.lenovo.com/us/en/solutions/ht511330-lenovo-open-source-portal
+The stock firmware runs `6.1.128-android14-11-g5c2cea985a84`. This tree builds
+the TB520FU kernel repository (`android14-6.1` at `2ecae636cf9b`, 6.1.138).
+Both are the same KMI generation, so the stock vendor modules are expected to
+load (stable KMI). This is not verified on the device yet; if modules fail to
+load, switch the kernel to `5c2cea985a84`.
 
 ## Getting the source
 
-Git LFS is needed for two blobs in the vendor repository (and, with the
-optional customizations, for the wallpaper APK and Lenovo Notes there).
-
 ```bash
 sudo apt install git-lfs && git lfs install
-mkdir pixelos && cd pixelos
-repo init -u https://github.com/PixelOS-AOSP/android_manifest -b seventeen --git-lfs
+mkdir evox && cd evox
+repo init -u https://github.com/Evolution-X/manifest -b cnb --git-lfs
 mkdir -p .repo/local_manifests
-# copy tools/local_manifest.xml to .repo/local_manifests/TB710FU.xml and
-# set fetch= to the GitHub account hosting the four repositories
-repo sync -c -j$(nproc)
-repo forall device/lenovo/TB710FU vendor/lenovo/TB710FU -c git lfs pull
+curl -L https://raw.githubusercontent.com/YOUR_GITHUB_ID/android_device_lenovo_TB710FU/cnb/tools/local_manifest.xml \
+  -o .repo/local_manifests/TB710FU.xml
+repo sync -c -j$(nproc) --force-sync --no-clone-bundle --no-tags
+repo forall vendor/lenovo/TB710FU -c git lfs pull
 ```
 
 ## Building
 
-The PixelOS source needs a few patches (see `patches/apply.sh`). They are
-applied with `git apply` only, nothing is committed, so `repo sync` keeps
-working; run the script again after every sync.
-
 ```bash
-bash device/lenovo/TB710FU/patches/apply.sh
 source build/envsetup.sh
-breakfast TB710FU user
-m pixelos
+lunch lineage_TB710FU-cp2a-userdebug
+m evolution
 ```
 
-The script also runs `vendor/lenovo/TB710FU-custom/patches/apply.sh` when
-the customizations repository is synced, and reverts its patches when it is
-gone.
-
-The build helper selects the `user` variant and keeps ADB authentication
-configured on by default. `WITH_ADB_INSECURE=true` explicitly requests the
-insecure ADB setting; unset, empty and `false` values keep authentication on.
-The AVB and app signing keys stay as configured below. `user` builds exclude
-debug tools, ADB root and the OTA `addon.d` preservation path.
-
-Or unattended, with the log in `build.log` and the result in `build.status`:
-
-```bash
-setsid nohup device/lenovo/TB710FU/tools/build.sh > /dev/null 2>&1 < /dev/null &
-```
-
-## OTA publishing
-
-Belongs to the optional customizations repository
-(`vendor/lenovo/TB710FU-custom`); see its README for the SourceForge folder
-layout, its `tools/ota_json.py` and the incremental OTA steps.
-
-## Installing
-
-Sideload the OTA package (`out/target/product/TB710FU/PixelOS_TB710FU-*.zip`)
-from the PixelOS recovery: Apply update > Apply from ADB, then
-`adb sideload <zip>`. It installs to the other slot, like any A/B update.
-
-If data has to be wiped (first install, or a change of signing keys), format
-data **before** sideloading. Formatting after the sideload also wipes the
-update snapshot in `/metadata`, and the new slot does not boot.
-
-The pvmfw image is part of the package: with dm-verity on, the bootloader
-checks it through vbmeta (stock `pvmfw.img` in the vendor repository, added
-with `--include_descriptors_from_image`).
-
-## Layout
-
-Based on the LineageOS OnePlus Pad 2 (`caihong`) and `oneplus/sm8650-common`
-trees, merged into one tree with the OnePlus-specific parts removed.
-
-- `init/`, `vintf/`, `sepolicy/`, `overlay/` — from the stock firmware
-  (`LapisRowFrameworksOverlay`, `LapisRowWifiResOverlay`,
-  `manifest_pineapple.xml` without IMS/DPM, the device is Wi-Fi only).
-- `health/` — QTI health HAL copy that ignores the pen charger (`wls_tx`).
-- `parts/` — TB710FUParts, "Lenovo features" in Settings > System: charging
-  modes, white balance strength, memory extension (zram writeback), pen
-  settings, and the physical keyboard page of the stock settings (stock
-  strings copied by `tools/lenovo_keyboard_strings.py`). The game performance
-  page and the Play Store identity moved to "Custom features"
-  (`vendor/lenovo/TB710FU-custom`).
-- `input/` — `tb520fu-input.jar`, loaded into system_server as a
-  DeviceKeyHandler: Lenovo pen (attach, pairing, battery, writing haptics,
-  buttons), keyboard keys, charging modes and double tap to wake, ported from
-  the stock ZUI services (see `input/NOTICE`). Also the converted Lenovo
-  keylayouts.
-- `lenovo/PenService/` — the stock PenService with a compat dex for APIs that
-  changed in Android 17.
-- `patches/` — PixelOS source patches, applied by `patches/apply.sh`.
-- `tools/bringup/` — scripts used to generate `proprietary-files.txt` and the
-  props from a stock dump (`TB710FU_STOCK`, default `~/tb520fu`).
-
-## Verified boot
-
-The stock firmware is signed with the public AOSP `testkey_rsa4096` (the flaw
-LTBox uses), and this tree signs the same way: recovery is chained at
-location 1, vbmeta_system at 2 and boot at 3. The device has no
-`vbmeta_vendor`. dm-verity is on, so after checking that a build boots
-unlocked, `fastboot flashing lock` (wipes data) gives a locked, green boot.
-
-Apps are signed with the AOSP test keys, so anyone can build compatible
-updates. Switching to other keys later needs a data wipe.
+32 GB of RAM is recommended. The `patches/` directory contains PixelOS patches
+from the TB520FU tree; they are not applied or tested on Evolution X, so the
+Lenovo pen and keyboard features may not work.
 
 ## Extracting blobs
 
@@ -176,5 +88,19 @@ updates. Switching to other keys later needs a data wipe.
 ```
 
 `<dump>` is an extracted stock firmware containing `vendor/`, `odm/`,
-`system_ext/` and `product/`. Not needed when the vendor repository is
-synced.
+`system_ext/`, `product/` and `pvmfw.img`. A full extraction clears the vendor
+repository, so restore the stock kernel files afterwards with
+`git -C ../../../vendor/lenovo/TB710FU checkout -- kernel`.
+
+## Verified boot
+
+Inherited from the TB520FU tree: images are signed with the public AOSP
+`testkey_rsa4096`, like the stock firmware. Not verified on TB710FU yet.
+Do not relock the bootloader before a build is confirmed to boot.
+
+## Credits
+
+- [wnduddld0513](https://github.com/wnduddld0513) for the TB520FU tree and kernel
+- The LineageOS project
+- The Evolution X project
+EOF
