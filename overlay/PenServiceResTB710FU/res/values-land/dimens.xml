@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- values-land gives the pen list a 160dp side padding (full screen ZUI);
+     keep a normal list padding in the pane. -->
+<resources>
+    <dimen name="pen_pref_padding">16dp</dimen>
+    <dimen name="pen_pref_padding_zui14_5">16dp</dimen>
+</resources>

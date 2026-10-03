@@ -1,0 +1,453 @@
+
+# Copyright (c) 2019-2021, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+# Changes from Qualcomm Innovation Center are provided under the following license:
+# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted (subject to the limitations in the
+# disclaimer below) provided that the following conditions are met:
+#
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#
+#     * Neither the name of Qualcomm Innovation Center, Inc. nor the names of
+#       its contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
+# GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+# HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import /vendor/etc/init/hw/init.qti.kernel.rc
+
+on early-init
+    write /proc/sys/kernel/printk_devkmsg ratelimited
+    export MEMTAG_OPTIONS off
+
+on init
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    chown system system /sys/devices/platform/soc/1d84000.ufshc/auto_hibern8
+    chmod 0660 /sys/devices/platform/soc/1d84000.ufshc/auto_hibern8
+    start logd
+    mkdir /dev/cpuctl/general
+    copy_per_line /dev/cpuctl/tasks /dev/cpuctl/general/tasks
+    chown system system /dev/cpuctl/general
+    chown system system /dev/cpuctl/general/tasks
+    chmod 0644 /dev/cpuctl/general/tasks
+
+on early-init && property:ro.baseband=apq
+    setprop ro.radio.noril yes
+
+on early-fs
+    start vold
+
+on fs
+    start hwservicemanager
+    mount_all /vendor/etc/fstab.qcom --early
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon_recursive /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/secnvm 0770 system system
+    mkdir /mnt/vendor/persist/data 0700 system system
+
+# create pccsec key path
+    mkdir /mnt/vendor/persist/security 0700 system system
+    mkdir /mnt/vendor/persist/security/slab 0700 system system
+on post-fs
+    #Execute virtualization manager
+    enable vendor.qvirtservice_rs
+    start  vendor.qvirtservice_rs
+
+on late-fs
+    wait_for_prop hwservicemanager.ready true
+    #exec_start wait_for_keymaster
+    mount_all /vendor/etc/fstab.qcom --late
+
+on post-fs-data
+    mkdir /vendor/data/tombstones 0771 system system
+    # Enable WLAN cold boot calibration
+    write /sys/kernel/cnss/fs_ready 1
+
+    # Audio add for smartpa calibration
+    mkdir /mnt/vendor/persist/factory
+    mkdir /mnt/vendor/persist/factory/audio
+    chmod 0777 mnt/vendor/persist/factory/audio
+    chmod 0664 mnt/vendor/persist/factory/audio/aw_cali.bin
+    chown system system mnt/vendor/persist/factory/audio/aw_cali.bin
+    chmod 0664 mnt/vendor/persist/factory/audio/aw_cali_f0.bin
+    chown system system mnt/vendor/persist/factory/audio/aw_cali_f0.bin
+    chmod 0777 /dev/aw882xx_smartpa
+
+    # add for display orientation
+    setprop ro.surface_flinger.primary_display_orientation ORIENTATION_270
+    setprop debug.sf.ignore_hwc_physical_display_orientation true
+
+on early-boot
+    verity_update_state
+
+on boot
+    write /dev/cpuset/audio-app/cpus 0-1
+    # Add a cpuset for the camera daemon
+    # We want all cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/camera-daemon/mems 0
+    write /sys/kernel/cnss/recovery 1
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
+    chmod 0660 /dev/cpuset/camera-daemon/tasks
+    chown system /sys/devices/platform/soc/990000.i2c/i2c-0/0-0038/trusted_touch_enable
+    chmod 0660 /sys/devices/platform/soc/990000.i2c/i2c-0/0-0038/trusted_touch_enable
+    chown system /sys/devices/platform/soc/990000.spi/spi_master/spi0/spi0.0/trusted_touch_enable
+    chmod 0660 /sys/devices/platform/soc/990000.spi/spi_master/spi0/spi0.0/trusted_touch_enable
+    chown system /sys/devices/system/cpu/hyp_core_ctl/enable
+    chown system /sys/devices/system/cpu/hyp_core_ctl/hcc_min_freq
+
+on property:persist.sys.vsr.enable=1
+    setprop vendor.qc2.filter.vsr.enable 1
+    setprop vendor.qc2.filter.vsr.forceNonUBWC 0
+    setprop vendor.qc2.filter.vsr.bypass 0
+    setprop ro.vendor.config.lgsi.vsr.supprt 0
+
+on property:persist.sys.vsr.enable=0
+    setprop vendor.qc2.filter.vsr.enable 1
+    setprop vendor.qc2.filter.vsr.forceNonUBWC 1
+    setprop vendor.qc2.filter.vsr.bypass 0
+    setprop ro.vendor.config.lgsi.vsr.supprt 0
+
+on property:persist.sys.vsr.fps=1
+    setprop vendor.qc2.filter.vsr.bypass 0
+
+on property:persist.sys.vsr.fps=0
+    setprop vendor.qc2.filter.vsr.bypass 1
+
+#camera property start
+on property:vendor.lenovocamera.packagename.zui=*
+    setprop vendor.camera.packagename.zui ${vendor.lenovocamera.packagename.zui}
+
+on property:vendor.lenovocamera.packagename.cts=*
+    setprop vendor.camera.packagename.cts ${vendor.lenovocamera.packagename.cts}
+
+on property:vendor.lenovocamera.packagename.client=*
+    setprop vendor.camera.packagename.client ${vendor.lenovocamera.packagename.client}
+
+on property:vendor.lenovocamera.packagename.camera0.client=*
+    setprop vendor.camera.packagename.camera0.client ${vendor.lenovocamera.packagename.camera0.client}
+
+on property:vendor.lenovocamera.packagename.camera1.client=*
+    setprop vendor.camera.packagename.camera1.client ${vendor.lenovocamera.packagename.camera1.client}
+
+on property:vendor.lenovocamera.pandora.enable=*
+    setprop vendor.camera.pandora.enable ${vendor.lenovocamera.pandora.enable}
+
+on property:vendor.lenovocamera.pandora.synthesis.targetapp=*
+    setprop vendor.camera.pandora.synthesis.targetapp ${vendor.lenovocamera.pandora.synthesis.targetapp}
+
+on property:vendor.lenovocamera.cammotorfeedbacktype=*
+    setprop vendor.camera.cammotorfeedbacktype ${vendor.lenovocamera.cammotorfeedbacktype}
+
+on property:vendor.lenovovideo.big.file.enable=*
+    setprop vendor.video.big.file.enable ${vendor.lenovovideo.big.file.enable}
+
+on property:vendor.lenovocamera.frontcamera.status=*
+    setprop vendor.camera.frontcamera.status ${vendor.lenovocamera.frontcamera.status}
+
+on property:vendor.lenovocamera.device.orientation=*
+    setprop vendor.camera.device.orientation ${vendor.lenovocamera.device.orientation}
+
+on property:persist.lenovo.tblenovo.enableThirdAppFB=*
+    setprop persist.odm.tblenovo.enableThirdAppFB ${persist.lenovo.tblenovo.enableThirdAppFB}
+
+on property:persist.lenovo.tblenovo.enableThirdAppBokeh=*
+    setprop persist.odm.tblenovo.enableThirdAppBokeh ${persist.lenovo.tblenovo.enableThirdAppBokeh}
+
+on property:persist.lenovo.tblenovo.orientation=*
+    setprop persist.odm.tblenovo.orientation ${persist.lenovo.tblenovo.orientation}
+
+on property:persist.lenovo.camera.blackMask=*
+    setprop persist.vendor.camera.blackMask ${persist.lenovo.camera.blackMask}
+
+on property:persist.lenovo.camera.beauty.level=*
+    setprop persist.odm.camera.beauty.level ${persist.lenovo.camera.beauty.level}
+
+on property:persist.lenovo.camera.blur.level=*
+    setprop persist.vendor.camera.blur.level ${persist.lenovo.camera.blur.level}
+
+on property:persist.lenovo.camera.seg.index=*
+    setprop persist.vendor.camera.seg.index ${persist.lenovo.camera.seg.index}
+
+on property:persist.lenovo.camera.superportraitvideo.enable=*
+    setprop persist.odm.camera.superportraitvideo.enable ${persist.lenovo.camera.superportraitvideo.enable}
+
+on property:persist.lenovo.camera.superportraitvideo.level=*
+    setprop persist.odm.camera.superportraitvideo.level ${persist.lenovo.camera.superportraitvideo.level}
+
+on property:persist.lenovo.camera.autoframing.switcher=*
+    setprop persist.odm.camera.autoframing.enable ${persist.lenovo.camera.autoframing.switcher}
+#camera property end
+
+on property:vendor.display.lcd_density=400
+   setprop dalvik.vm.heapgrowthlimit 288m
+
+on property:vendor.display.lcd_density=560
+   setprop dalvik.vm.heapgrowthlimit 256m
+
+on property:vendor.display.lcd_density=640
+   setprop dalvik.vm.heapgrowthlimit 512m
+
+on init && property:ro.boot.mode=charger
+    wait_for_prop vendor.all.modules.ready 1
+    mount_all /vendor/etc/charger_fw_fstab.qti --early
+    start vendor.pd_mapper
+    wait /sys/kernel/boot_adsp/boot
+    write /sys/kernel/boot_adsp/boot 1
+
+on charger
+    start vendor.power_off_alarm
+    write /sys/kernel/cnss/charger_mode 1
+
+#service vendor.lowi /vendor/bin/sscrpcd
+#   class core
+#   user system
+#   group system wakelock
+#   capabilities BLOCK_SUSPEND
+
+#pd-mapper
+service vendor.pd_mapper /vendor/bin/pd-mapper
+    class core
+    user system
+    group system
+
+#Peripheral manager
+service vendor.per_mgr /vendor/bin/pm-service
+    class core
+    user system
+    group system
+    ioprio rt 4
+
+service vendor.per_proxy /vendor/bin/pm-proxy
+    class core
+    user system
+    group system
+    disabled
+
+#service vendor.mdm_helper /vendor/bin/mdm_helper
+#    class core
+#    group system wakelock
+#    disabled
+
+service vendor.mdm_launcher /vendor/bin/sh /vendor/bin/init.mdm.sh
+    class core
+    oneshot
+
+on property:init.svc.vendor.per_mgr=running
+    start vendor.per_proxy
+
+on property:sys.shutdown.requested=*
+    write /sys/kernel/qcom_rproc/shutdown_in_progress 1
+    stop vendor.per_proxy
+
+on property:vold.decrypt=trigger_restart_framework
+   start vendor.cnss_diag
+
+service vendor.cnss_diag /system/vendor/bin/cnss_diag -q -f -t HELIUM
+   class main
+   user system
+   group system wifi inet sdcard_rw media_rw diag
+   oneshot
+
+on early-boot && property:persist.vendor.pcie.boot_option=*
+    write /sys/bus/platform/devices/1c00000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}
+    write /sys/bus/platform/devices/1c08000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}
+
+service fan_control_turn_on /vendor/bin/fan_service 1
+    class late_start
+    user root
+    disabled
+    oneshot
+
+service fan_control_turn_off /vendor/bin/fan_service 0
+    class late_start
+    user root
+    disabled
+    oneshot
+
+on boot
+   chown root shell /sys/kernel/rkp_md5/rkp_md5
+
+#pen dda
+on property:sys.boot_completed=1
+    chmod 0444 /dev/lenovo_penraw
+
+on property:sys.boot_completed=1 && property:ro.build.type=user
+    write /sys/kernel/dload/dload_mode mini
+    write /sys/kernel/dload/emmc_dload 1
+    write /sys/module/qcom_ramdump/parameters/enable_dump_collection 1
+
+on property:ro.vendor.build.fingerprint=*
+    write /mnt/vendor/persist/fingerprint.txt ${ro.vendor.build.fingerprint}
+
+on property:ro.odm.fingerprint.update=*
+    setprop ro.vendor.build.fingerprint ${ro.odm.fingerprint.update}
+    setprop ro.system.build.fingerprint ${ro.odm.fingerprint.update}
+    setprop ro.product.build.fingerprint ${ro.odm.fingerprint.update}
+    setprop ro.odm.build.fingerprint ${ro.odm.fingerprint.update}
+    setprop ro.bootimage.build.fingerprint ${ro.odm.fingerprint.update}
+
+#BEGIN Lenovo, liulan2, 2024/10/15. KIRBYU-13505, apply some strategy to improve antutu score
+# prepare for antutu test
+#gpu test
+on property:debug.zui.antutu_status=1
+    #start setup_on_gputest
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/240b7400.qcom,bwmon-llcc/max_freq 1066000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/240b7400.qcom,bwmon-llcc/min_freq 1066000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold/max_freq 1066000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold/min_freq 1066000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:silver/max_freq 600000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:silver/min_freq 600000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold-compute/max_freq 600000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold-compute/min_freq 600000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/24091000.qcom,bwmon-ddr/max_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/24091000.qcom,bwmon-ddr/min_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:gold/max_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:gold/min_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:gold-compute/min_freq 2092000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime/max_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime/min_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime-latfloor/max_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime-latfloor/min_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:silver/max_freq 1555000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:silver/min_freq 1555000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:gold/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:gold/min_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime/min_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime-compute/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime-compute/min_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:silver/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:silver/min_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:gold/max_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:gold/min_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime/max_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime/min_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime-latfloor/max_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime-latfloor/min_freq 1
+    write /sys/class/kgsl/kgsl-3d0/idle_timer 10000000
+    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 787200
+    #write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 844800
+    #write /sys/devices/system/cpu/cpu5/cpufreq/scaling_min_freq 844800
+    #write /sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq 902400
+
+#mem & cpu test
+on property:debug.zui.antutu_status=2
+    #start setup_on_memtest
+    write /sys/class/kgsl/kgsl-3d0/idle_timer 80
+    write /sys/devices/system/cpu/qcom_lpm/parameters/sleep_disabled 1
+    #boost ufs
+    write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 0
+
+#UI test
+on property:debug.zui.antutu_status=3
+    write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 1
+
+#storage test
+on property:debug.zui.antutu_status=4
+    #boost ufs
+    write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 0
+
+on property:debug.zui.antutu_status=0
+    #restore ufs
+    write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 1
+
+#test ends
+on property:debug.zui.antutu_status=-1
+    #start restore_after_test
+    write /sys/class/kgsl/kgsl-3d0/idle_timer 80
+    write /sys/devices/system/cpu/qcom_lpm/parameters/sleep_disabled 0
+
+    #restore ufs
+    write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 1
+
+    #restore mem setting
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/240b7400.qcom,bwmon-llcc/max_freq 806000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/240b7400.qcom,bwmon-llcc/min_freq 300000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold/max_freq 1066000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold/min_freq 300000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:silver/max_freq 600000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:silver/min_freq 300000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold-compute/max_freq 600000
+    write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold-compute/min_freq 300000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/24091000.qcom,bwmon-ddr/max_freq 2736000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/24091000.qcom,bwmon-ddr/min_freq 547000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:gold/max_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:gold/min_freq 547000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:gold-compute/min_freq 547000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime/max_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime/min_freq 547000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime-latfloor/max_freq 4224000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:prime-latfloor/min_freq 547000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:silver/max_freq 1555000
+    write /sys/devices/system/cpu/bus_dcvs/DDR/soc:qcom,memlat:ddr:silver/min_freq 547000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:gold/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:gold/min_freq 307200
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime/min_freq 307200
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime-compute/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:prime-compute/min_freq 307200
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:silver/max_freq 1728000
+    write /sys/devices/system/cpu/bus_dcvs/L3/soc:qcom,memlat:l3:silver/min_freq 307200
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:gold/max_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:gold/min_freq 0
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime/max_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime/min_freq 0
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime-latfloor/max_freq 1
+    write /sys/devices/system/cpu/bus_dcvs/DDRQOS/soc:qcom,memlat:ddrqos:prime-latfloor/min_freq 0
+    #restore cpu min setting
+    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 556800
+    #write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 614400
+    #write /sys/devices/system/cpu/cpu5/cpufreq/scaling_min_freq 499200
+    #write /sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq 672000
+#END KIRBYU-13505

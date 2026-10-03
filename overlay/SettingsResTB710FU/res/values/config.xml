@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- White balance lives in Lenovo features (TB710FUParts) together with its
+         strength slider; needs patches/packages_apps_Settings-0001. -->
+    <bool name="config_show_display_white_balance">false</bool>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <color name="list_item_text_normal_zui">@android:color/system_neutral1_100</color>
+    <color name="list_item_text_disabled_zui">@android:color/system_neutral2_600</color>
+    <color name="list_item_second_line_text_normal_zui">@android:color/system_neutral2_300</color>
+    <color name="preference_category_text_zui">@android:color/system_accent1_200</color>
+    <!-- neutral1_50 is #F1F0F6 in the night map; keep the theme background. -->
+    <color name="preference_category_bg_zui">@android:color/transparent</color>
+    <color name="system_primary_color_on_zui">@android:color/system_accent1_500</color>
+    <color name="system_primary_color_on_pressed_zui">@android:color/system_accent1_700</color>
+    <color name="system_primary_color_on_hovered_zui">@android:color/system_accent1_600</color>
+    <color name="system_primary_color_off_pressed_zui">@android:color/system_neutral2_300</color>
+    <color name="system_icon_off_color_zui">@android:color/system_accent2_600</color>
+    <!-- Page and navigation bar background: the PixelOS Settings background
+         (settingslib_materialColorSurfaceContainer). -->
+    <color name="background_zui">@android:color/system_surface_container_dark</color>
+</resources>

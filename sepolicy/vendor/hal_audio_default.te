@@ -1,0 +1,2 @@
+allow hal_audio_default vendor_persist_audio_file:dir r_dir_perms;
+allow hal_audio_default vendor_persist_audio_file:file r_file_perms;

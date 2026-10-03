@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- Theme.AppCompat.Zui uses @color/background_zui as colorBackground; the
+     stock value is a static #fffafafa (night: @color/system_background_zui), so
+     map it onto the PixelOS Settings surface instead. Colours only. -->
+<resources>
+    <color name="background_zui">@android:color/system_surface_container_light</color>
+</resources>

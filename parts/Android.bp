@@ -1,0 +1,28 @@
+//
+// SPDX-FileCopyrightText: 2026 The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+// Device settings for the Lenovo Yoga Tab Plus (TB710FU): memory extension
+// (zram writeback) and, later, battery protection. Injected into
+// Settings > System.
+//
+
+android_app {
+    name: "TB710FUParts",
+
+    srcs: ["src/**/*.kt"],
+    resource_dirs: ["res"],
+    certificate: "platform",
+    platform_apis: true,
+    system_ext_specific: true,
+    privileged: true,
+
+    static_libs: [
+        "SettingsLib",
+        "androidx.preference_preference",
+    ],
+
+    optimize: {
+        proguard_flags_files: ["proguard.flags"],
+    },
+}

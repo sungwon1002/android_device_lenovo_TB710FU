@@ -1,0 +1,243 @@
+diff --git a/core/java/android/app/SystemServiceRegistry.java b/core/java/android/app/SystemServiceRegistry.java
+index cc0e7b5cb..430da377e 100644
+--- a/core/java/android/app/SystemServiceRegistry.java
++++ b/core/java/android/app/SystemServiceRegistry.java
+@@ -53,6 +53,7 @@ import android.app.contentsuggestions.ContentSuggestionsManager;
+ import android.app.contentsuggestions.IContentSuggestionsManager;
+ import android.app.contextualsearch.ContextualSearchManager;
+ import android.app.ecm.EnhancedConfirmationFrameworkInitializer;
++import android.app.haptic.ZuiPenHapticManager;
+ import android.app.job.JobSchedulerFrameworkInitializer;
+ import android.app.lskfreset.ILskfResetManager;
+ import android.app.lskfreset.LskfResetManager;
+@@ -403,6 +404,14 @@ public final class SystemServiceRegistry {
+                 return new CaptioningManager(ctx);
+             }});
+ 
++        // Lenovo pen haptics, served by the device's DeviceKeyHandler (TB520FU)
++        registerService(ZuiPenHapticManager.SERVICE, ZuiPenHapticManager.class,
++                new CachedServiceFetcher<ZuiPenHapticManager>() {
++            @Override
++            public ZuiPenHapticManager createService(ContextImpl ctx) {
++                return new ZuiPenHapticManager(ctx);
++            }});
++
+         registerService(Context.ACCOUNT_SERVICE, AccountManager.class,
+                 new CachedServiceFetcher<AccountManager>() {
+             @Override
+diff --git a/core/java/android/app/haptic/IZuiPenHapticManager.aidl b/core/java/android/app/haptic/IZuiPenHapticManager.aidl
+new file mode 100644
+index 000000000..399e1cc08
+--- /dev/null
++++ b/core/java/android/app/haptic/IZuiPenHapticManager.aidl
+@@ -0,0 +1,25 @@
++/*
++ * SPDX-FileCopyrightText: 2026 The LineageOS Project
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++package android.app.haptic;
++
++import android.graphics.Rect;
++
++/**
++ * Lenovo pen haptic service ("zui_pen_haptic"), same interface as ZUI so the
++ * stock Lenovo apps work. Implemented in system_server by the device's
++ * DeviceKeyHandler jar.
++ *
++ * @hide
++ */
++interface IZuiPenHapticManager {
++    boolean isHapticReady();
++    boolean setHapticImpactParams(int waveFormId, int level, int repeatCount, int cutOffTime);
++    boolean setHapticContinuousParams(int waveFormId, int level, int startFriction);
++    boolean stopHaptic(int waveFormId);
++    void setHapticSdkPackage(int pid);
++    void setUseHaptic(boolean use);
++    void setEraserRect(in List<Rect> eraserRects, in List<Rect> maskedRects);
++}
+diff --git a/core/java/android/app/haptic/ZuiPenHapticManager.java b/core/java/android/app/haptic/ZuiPenHapticManager.java
+new file mode 100644
+index 000000000..ce3840d13
+--- /dev/null
++++ b/core/java/android/app/haptic/ZuiPenHapticManager.java
+@@ -0,0 +1,134 @@
++/*
++ * SPDX-FileCopyrightText: 2026 The LineageOS Project
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++package android.app.haptic;
++
++import android.compat.annotation.UnsupportedAppUsage;
++import android.content.Context;
++import android.graphics.Rect;
++import android.os.IBinder;
++import android.os.Process;
++import android.os.RemoteException;
++import android.os.ServiceManager;
++import android.util.Log;
++
++import java.util.List;
++
++/**
++ * Client of the Lenovo pen haptic service, API compatible with the ZUI class
++ * the Lenovo apps (PenService, Lenovo Notes) are compiled against. Obtained
++ * with {@code context.getSystemService("zui_pen_haptic")}. The service is
++ * looked up lazily, calls fail soft while it is not there.
++ *
++ * <p>Third-party note apps call it too (Notein checks {@link #isHapticReady()}
++ * on every pen touch). Being {@code @hide}, its members would be in the
++ * blocked hidden API list and such an app crashes with NoSuchMethodError on
++ * the first stroke, so the members an app can call are
++ * {@link UnsupportedAppUsage}: the "unsupported" list, callable at any
++ * target SDK, as on ZUI.
++ *
++ * @hide
++ */
++public class ZuiPenHapticManager {
++    private static final String TAG = "ZuiPenHapticManager";
++
++    /** Service name. */
++    @UnsupportedAppUsage
++    public static final String SERVICE = "zui_pen_haptic";
++
++    private IZuiPenHapticManager mService;
++    private boolean mSdkRegistered;
++
++    @UnsupportedAppUsage
++    public ZuiPenHapticManager(Context context) {
++    }
++
++    private IZuiPenHapticManager service() {
++        if (mService == null || !mService.asBinder().isBinderAlive()) {
++            IBinder b = ServiceManager.getService(SERVICE);
++            mService = b != null ? IZuiPenHapticManager.Stub.asInterface(b) : null;
++            if (mService != null && !mSdkRegistered) {
++                mSdkRegistered = true;
++                try {
++                    mService.setHapticSdkPackage(Process.myPid());
++                } catch (RemoteException e) {
++                    Log.w(TAG, "setHapticSdkPackage", e);
++                }
++            }
++        }
++        return mService;
++    }
++
++    @UnsupportedAppUsage
++    public boolean setHapticImpactParams(int waveFormId, int level, int repeatCount,
++            int cutOffTime) {
++        IZuiPenHapticManager s = service();
++        if (s == null) return false;
++        try {
++            return s.setHapticImpactParams(waveFormId, level, repeatCount, cutOffTime);
++        } catch (RemoteException e) {
++            Log.w(TAG, "setHapticImpactParams", e);
++            return false;
++        }
++    }
++
++    @UnsupportedAppUsage
++    public boolean setHapticContinuousParams(int waveFormId, int level, int startFriction) {
++        IZuiPenHapticManager s = service();
++        if (s == null) return false;
++        try {
++            return s.setHapticContinuousParams(waveFormId, level, startFriction);
++        } catch (RemoteException e) {
++            Log.w(TAG, "setHapticContinuousParams", e);
++            return false;
++        }
++    }
++
++    @UnsupportedAppUsage
++    public boolean stopHaptic(int waveFormId) {
++        IZuiPenHapticManager s = service();
++        if (s == null) return false;
++        try {
++            return s.stopHaptic(waveFormId);
++        } catch (RemoteException e) {
++            Log.w(TAG, "stopHaptic", e);
++            return false;
++        }
++    }
++
++    @UnsupportedAppUsage
++    public boolean isHapticReady() {
++        IZuiPenHapticManager s = service();
++        if (s == null) return false;
++        try {
++            return s.isHapticReady();
++        } catch (RemoteException e) {
++            Log.w(TAG, "isHapticReady", e);
++            return false;
++        }
++    }
++
++    @UnsupportedAppUsage
++    public void setUseHaptic(boolean use) {
++        IZuiPenHapticManager s = service();
++        if (s == null) return;
++        try {
++            s.setUseHaptic(use);
++        } catch (RemoteException e) {
++            Log.w(TAG, "setUseHaptic", e);
++        }
++    }
++
++    @UnsupportedAppUsage
++    public void setEraserRect(List<Rect> eraserRects, List<Rect> maskedRects) {
++        IZuiPenHapticManager s = service();
++        if (s == null) return;
++        try {
++            s.setEraserRect(eraserRects, maskedRects);
++        } catch (RemoteException e) {
++            Log.w(TAG, "setEraserRect", e);
++        }
++    }
++}
+diff --git a/core/java/com/android/internal/view/RotationPolicy.java b/core/java/com/android/internal/view/RotationPolicy.java
+index 98d50c782..22953765c 100644
+--- a/core/java/com/android/internal/view/RotationPolicy.java
++++ b/core/java/com/android/internal/view/RotationPolicy.java
+@@ -132,6 +132,14 @@ public final class RotationPolicy {
+         setRotationLockAtAngle(context, enabled, rotation, caller);
+     }
+ 
++    /**
++     * Pre-caller variant, still called by prebuilt vendor apps (Lenovo PenService).
++     */
++    public static void setRotationLockAtAngle(Context context, final boolean enabled,
++            final int rotation) {
++        setRotationLockAtAngle(context, enabled, rotation, "RotationPolicy#legacy");
++    }
++
+     /**
+      * Enables or disables rotation lock at a specific rotation from system UI.
+      */
+diff --git a/core/res/res/values/custom_config.xml b/core/res/res/values/custom_config.xml
+index cc16df183..91e9f13c1 100644
+--- a/core/res/res/values/custom_config.xml
++++ b/core/res/res/values/custom_config.xml
+@@ -165,4 +165,9 @@
+        <item>restart_recovery</item>
+        <item>restart_bootloader</item>
+    </string-array>
++
++    <!-- Apps offered for Lenovo pen writing haptics (ZUI config, read by
++         PenService with getIdentifier); devices overlay the list. -->
++    <string-array name="config_stylus_pen_haptic_packages" translatable="false">
++    </string-array>
+ </resources>
+diff --git a/core/res/res/values/custom_symbols.xml b/core/res/res/values/custom_symbols.xml
+index 94c88e768..124e3b909 100644
+--- a/core/res/res/values/custom_symbols.xml
++++ b/core/res/res/values/custom_symbols.xml
+@@ -127,4 +127,7 @@
+ 
+    <!-- Defines the actions shown in advanced reboot submenu -->
+    <java-symbol type="array" name="config_restartActionsList" />
++
++   <!-- Lenovo pen writing haptics -->
++   <java-symbol type="array" name="config_stylus_pen_haptic_packages" />
+ </resources>

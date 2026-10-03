@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- keyboard_shortcut_value_app1/2 actions, see input/.../KeyboardController.java -->
+    <string-array name="app_key_values" translatable="false">
+        <item>none</item>
+        <item>screenshot</item>
+        <item>notifications</item>
+        <item>quick_settings</item>
+        <item>recents</item>
+        <item>assistant</item>
+        <item>search</item>
+        <item>settings</item>
+    </string-array>
+</resources>

@@ -1,0 +1,7 @@
+# Firmware written to the target slot by the ROM zip and OTAs (radio/).
+# From TB710FU_CN_OPEN_USER_Q00019.0_A16_ZUXOS_1.5.04.470_ST_260625.
+
+# pvmfw (protected VM firmware): the bootloader verifies it through vbmeta
+# once dm-verity is on; without its descriptor (BoardConfig) slot b was marked
+# unbootable and the first boot could crash.
+pvmfw.img;AB

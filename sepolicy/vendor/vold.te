@@ -1,0 +1,1 @@
+dontaudit vold { mnt_product_file vendor_qmcs_file vendor_spunvm_file }:dir { open read search ioctl };

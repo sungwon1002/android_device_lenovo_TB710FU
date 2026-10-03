@@ -1,0 +1,105 @@
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 23e503b..462bdde 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -6406,5 +6406,19 @@
+             </intent-filter>
+         </receiver>
+ 
++        <!-- Lenovo PenService opens its pen settings through the stock Lenovo
++             settings action (stylus toolbox). On a large screen embed the page
++             next to the Settings home; otherwise open it directly (TB520FU). -->
++        <activity android:name=".lenovo.LenovoPlaceHolderActivity"
++            android:exported="true"
++            android:excludeFromRecents="true"
++            android:noHistory="true"
++            android:theme="@android:style/Theme.NoDisplay">
++            <intent-filter>
++                <action android:name="com.android.settings.PLACE_HOLDER" />
++                <category android:name="android.intent.category.DEFAULT" />
++            </intent-filter>
++        </activity>
++
+     </application>
+ </manifest>
+diff --git a/src/com/android/settings/lenovo/LenovoPlaceHolderActivity.java b/src/com/android/settings/lenovo/LenovoPlaceHolderActivity.java
+new file mode 100644
+index 0000000..e51c8ea
+--- /dev/null
++++ b/src/com/android/settings/lenovo/LenovoPlaceHolderActivity.java
+@@ -0,0 +1,75 @@
++/*
++ * SPDX-FileCopyrightText: 2026 The LineageOS Project
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++package com.android.settings.lenovo;
++
++import android.app.Activity;
++import android.content.Intent;
++import android.os.Bundle;
++import android.provider.Settings;
++import android.text.TextUtils;
++import android.util.Log;
++
++import com.android.settings.activityembedding.ActivityEmbeddingUtils;
++
++import java.util.Set;
++
++/**
++ * The stock Lenovo settings app opens pages of other Lenovo apps inside
++ * Settings with action com.android.settings.PLACE_HOLDER and the target in
++ * :settings:place_holder_package_name / _class_name. The Lenovo PenService
++ * uses it for its pen settings (e.g. the settings button of the stylus
++ * toolbox). On a large screen Settings can show the page next to its own
++ * two-pane home, so open the target through the Settings embedded deep link
++ * and let Settings embed it; otherwise open the page directly.
++ */
++public class LenovoPlaceHolderActivity extends Activity {
++    private static final String TAG = "LenovoPlaceHolder";
++
++    private static final String EXTRA_PACKAGE = ":settings:place_holder_package_name";
++    private static final String EXTRA_CLASS = ":settings:place_holder_class_name";
++
++    /* The PenService page is listed under System > Lenovo features. */
++    private static final String HIGHLIGHT_MENU_KEY = "top_level_system";
++
++    /** Only pages of these apps are opened. */
++    private static final Set<String> ALLOWED = Set.of("com.lenovo.penservice");
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        Intent in = getIntent();
++        String pkg = in.getStringExtra(EXTRA_PACKAGE);
++        String cls = in.getStringExtra(EXTRA_CLASS);
++        // Class names of these apps do not always start with the package name
++        // (com.lenovo.penservice -> com.lenovo.pen.bt.ui.BtSettingsActivity).
++        if (!TextUtils.isEmpty(pkg) && !TextUtils.isEmpty(cls) && ALLOWED.contains(pkg)) {
++            Intent target = new Intent(Intent.ACTION_MAIN).setClassName(pkg, cls);
++            Intent out;
++            if (ActivityEmbeddingUtils.isEmbeddingActivityEnabled(this)) {
++                out = new Intent(Settings.ACTION_SETTINGS_EMBED_DEEP_LINK_ACTIVITY)
++                        .setPackage(getPackageName())
++                        .putExtra(Settings.EXTRA_SETTINGS_EMBEDDED_DEEP_LINK_INTENT_URI,
++                                target.toUri(Intent.URI_INTENT_SCHEME))
++                        .putExtra(Settings.EXTRA_SETTINGS_EMBEDDED_DEEP_LINK_HIGHLIGHT_MENU_KEY,
++                                HIGHLIGHT_MENU_KEY)
++                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
++                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
++            } else {
++                out = target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++                Bundle extras = in.getExtras();
++                if (extras != null) out.putExtras(extras);
++            }
++            try {
++                startActivity(out);
++            } catch (Exception e) {
++                Log.w(TAG, "cannot open " + pkg + "/" + cls, e);
++            }
++        } else {
++            Log.w(TAG, "ignored " + pkg + "/" + cls);
++        }
++        finish();
++    }
++}

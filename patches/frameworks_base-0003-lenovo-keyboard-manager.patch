@@ -1,0 +1,205 @@
+diff --git a/core/java/android/app/SystemServiceRegistry.java b/core/java/android/app/SystemServiceRegistry.java
+--- a/core/java/android/app/SystemServiceRegistry.java
++++ b/core/java/android/app/SystemServiceRegistry.java
+@@ -57,6 +57,7 @@
+ import android.app.job.JobSchedulerFrameworkInitializer;
+ import android.app.lskfreset.ILskfResetManager;
+ import android.app.lskfreset.LskfResetManager;
++import android.app.keyboard.LenovoKeyboardManager;
+ import android.app.modes.ContextualModeManager;
+ import android.app.ondeviceintelligence.OnDeviceIntelligenceFrameworkInitializer;
+ import android.app.people.PeopleManager;
+@@ -421,6 +422,15 @@
+                 return new AccountManager(ctx, service);
+             }});
+ 
++        // Lenovo keyboard firmware updater access, served by the device's
++        // DeviceKeyHandler (TB520FU)
++        registerService(LenovoKeyboardManager.SERVICE, LenovoKeyboardManager.class,
++                new CachedServiceFetcher<LenovoKeyboardManager>() {
++            @Override
++            public LenovoKeyboardManager createService(ContextImpl ctx) {
++                return new LenovoKeyboardManager(ctx);
++            }});
++
+         registerService(Context.ACTIVITY_SERVICE, ActivityManager.class,
+                 new CachedServiceFetcher<ActivityManager>() {
+             @Override
+diff --git a/core/java/android/app/keyboard/ILenovoKeyboardService.aidl b/core/java/android/app/keyboard/ILenovoKeyboardService.aidl
+new file mode 100644
+index 000000000..32e7df64c
+--- /dev/null
++++ b/core/java/android/app/keyboard/ILenovoKeyboardService.aidl
+@@ -0,0 +1,25 @@
++/*
++ * SPDX-FileCopyrightText: 2026 The LineageOS Project
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++package android.app.keyboard;
++
++/**
++ * Raw access to the Lenovo keyboard (pogo pin serial port / hidraw) through the
++ * vendor keyboard HAL, for the Lenovo keyboard firmware updater. Same
++ * interface and transaction order as the stock ZUI service.
++ *
++ * @hide
++ */
++interface ILenovoKeyboardService {
++    int kb_open(String path);
++    String kb_read(int fd, int size);
++    byte[] kb_read_data(int fd, int size);
++    int kb_write_data(int fd, int size, inout byte[] data);
++    void kb_close(int fd);
++    byte[] kb_getfeature(int fd, int size, inout byte[] data);
++    int kb_setfeature(int fd, inout byte[] data, int size);
++    String kb_getrawname(int fd);
++    byte[] kb_getrawinfo(int fd);
++}
+diff --git a/core/java/android/app/keyboard/LenovoKeyboardManager.java b/core/java/android/app/keyboard/LenovoKeyboardManager.java
+new file mode 100644
+index 000000000..ea95319c3
+--- /dev/null
++++ b/core/java/android/app/keyboard/LenovoKeyboardManager.java
+@@ -0,0 +1,124 @@
++/*
++ * SPDX-FileCopyrightText: 2026 The LineageOS Project
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++package android.app.keyboard;
++
++import android.content.Context;
++import android.os.IBinder;
++import android.os.RemoteException;
++import android.os.ServiceManager;
++import android.util.Log;
++
++/**
++ * Client of the "lenovokeyboard" service, which the Lenovo keyboard firmware
++ * updater (ZuiKeyboardUpdate) looks up with getSystemService() and calls by
++ * reflection. The service is published by the device's DeviceKeyHandler and
++ * forwards to the vendor keyboard HAL.
++ *
++ * @hide
++ */
++public class LenovoKeyboardManager {
++    private static final String TAG = "LenovoKeyboardManager";
++
++    /** Name of the service, as the stock Context.LENOVOKEYBOARD_SERVICE. */
++    public static final String SERVICE = "lenovokeyboard";
++
++    private final ILenovoKeyboardService mService;
++
++    public LenovoKeyboardManager(Context context) {
++        IBinder b = ServiceManager.getService(SERVICE);
++        mService = b != null ? ILenovoKeyboardService.Stub.asInterface(b) : null;
++        if (mService == null) Log.w(TAG, SERVICE + " service not found");
++    }
++
++    public int kb_open(String path) {
++        if (mService == null) return 0;
++        try {
++            return mService.kb_open(path);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_open", e);
++            return 0;
++        }
++    }
++
++    public String kb_read(int fd, int size) {
++        if (mService == null) return null;
++        try {
++            return mService.kb_read(fd, size);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_read", e);
++            return null;
++        }
++    }
++
++    public byte[] kb_read_data(int fd, int size) {
++        if (mService == null) return null;
++        try {
++            return mService.kb_read_data(fd, size);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_read_data", e);
++            return null;
++        }
++    }
++
++    public int kb_write_data(int fd, int size, byte[] data) {
++        if (mService == null) return 0;
++        try {
++            return mService.kb_write_data(fd, size, data);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_write_data", e);
++            return 0;
++        }
++    }
++
++    public void kb_close(int fd) {
++        if (mService == null) return;
++        try {
++            mService.kb_close(fd);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_close", e);
++        }
++    }
++
++    public byte[] kb_getfeature(int fd, int size, byte[] data) {
++        if (mService == null) return null;
++        try {
++            return mService.kb_getfeature(fd, size, data);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_getfeature", e);
++            return null;
++        }
++    }
++
++    public int kb_setfeature(int fd, byte[] data, int size) {
++        if (mService == null) return 0;
++        try {
++            return mService.kb_setfeature(fd, data, size);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_setfeature", e);
++            return 0;
++        }
++    }
++
++    public String kb_getrawname(int fd) {
++        if (mService == null) return null;
++        try {
++            return mService.kb_getrawname(fd);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_getrawname", e);
++            return null;
++        }
++    }
++
++    public byte[] kb_getrawinfo(int fd) {
++        if (mService == null) return null;
++        try {
++            return mService.kb_getrawinfo(fd);
++        } catch (RemoteException e) {
++            Log.e(TAG, "kb_getrawinfo", e);
++            return null;
++        }
++    }
++}
+diff --git a/core/res/res/values/tb520fu_patch_keyboard_manager.xml b/core/res/res/values/tb520fu_patch_keyboard_manager.xml
+new file mode 100644
+index 000000000..5f5fc8d20
+--- /dev/null
++++ b/core/res/res/values/tb520fu_patch_keyboard_manager.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     SPDX-FileCopyrightText: 2026 The LineageOS Project
++     SPDX-License-Identifier: Apache-2.0
++-->
++<!-- Marker for the TB520FU Lenovo keyboard manager framework patch. The
++     resource exists only while that patch is applied, so TB520FUParts can show
++     the keyboard firmware settings only on builds that have it. -->
++<resources>
++    <bool name="config_tb520fu_patch_keyboard_manager" translatable="false">true</bool>
++</resources>

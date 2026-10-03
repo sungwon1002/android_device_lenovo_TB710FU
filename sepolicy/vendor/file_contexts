@@ -1,0 +1,30 @@
+# UFS bsg nodes used by the TEE (RPMB)
+/dev/0:0:0:[0-9]+                               u:object_r:vendor_bsg_device:s0
+
+# Health HAL (device copy that ignores wls_tx)
+/vendor/bin/hw/android\.hardware\.health-service\.tb520fu u:object_r:hal_health_default_exec:s0
+
+# Persist: awinic speaker amplifier calibration
+/mnt/vendor/persist/factory/audio(/.*)?         u:object_r:vendor_persist_audio_file:s0
+
+# Lenovo HALs
+/vendor/bin/hw/vendor\.lenovo\.hardware\.battery-service     u:object_r:hal_lenovobattery_default_exec:s0
+/vendor/bin/hw/vendor\.lenovo\.hardware\.keyboard-service    u:object_r:hal_lenovokeyboard_default_exec:s0
+/vendor/bin/hw/vendor\.lenovo\.hardware\.touchscreen-service u:object_r:hal_lenovotouchscreen_default_exec:s0
+/dev/ttyHS1                                     u:object_r:lenovo_keyboard_device:s0
+/dev/lenovo_penraw                              u:object_r:lenovo_device:s0
+/dev/block/platform/soc/1d84000\.ufshc/by-name/lenovocust u:object_r:lenovocust_block_device:s0
+
+# Dolby DAX3
+/vendor/bin/hw/vendor\.dolby\.hardware\.dms@2\.0-service    u:object_r:hal_dms_default_exec:s0
+/data/vendor/dolby(/.*)?                        u:object_r:vendor_data_file:s0
+
+# Goodix fingerprint
+/vendor/bin/hw/android\.hardware\.biometrics\.fingerprint-service\.gf u:object_r:hal_fingerprint_default_exec:s0
+/dev/goodix_fp                                  u:object_r:goodix_fp_device:s0
+
+# WLAN driver (kernel) reads the MAC from persist
+/mnt/vendor/persist/kiwi_v2(/.*)?                u:object_r:vendor_persist_wlan_file:s0
+/vendor/bin/init\.tb520fu\.region\.sh    u:object_r:tb520fu_region_exec:s0
+/vendor/bin/setwlansardsi[0-9]\.sh    u:object_r:tb520fu_wlan_sar_exec:s0
+/vendor/bin/vendor_cmd_tool    u:object_r:tb520fu_wlan_sar_exec:s0

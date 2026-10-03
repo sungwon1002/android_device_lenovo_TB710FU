@@ -1,0 +1,14 @@
+persist.vendor.sys.fp.          u:object_r:vendor_fp_prop:s0
+ro.vendor.config.lgsi.          u:object_r:vendor_lenovo_config_prop:s0
+
+# Set from vendor.prop by vendor_init
+persist.vendor.bt.a2dp_offload_cap u:object_r:vendor_bluetooth_prop:s0
+
+# Camera HAL: module OTP checks and serial numbers
+vendor.main_back.               u:object_r:vendor_camera_prop:s0
+vendor.main_front.              u:object_r:vendor_camera_prop:s0
+vendor.main_macro.              u:object_r:vendor_camera_prop:s0
+vendor.camera.sn.               u:object_r:vendor_camera_prop:s0
+
+# Package variant (dtb region), see init.tb520fu.region.sh
+ro.vendor.tb520fu.dtb_region    u:object_r:vendor_tb520fu_region_prop:s0 exact string

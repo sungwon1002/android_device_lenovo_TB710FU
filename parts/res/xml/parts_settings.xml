@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/app_name">
+
+    <PreferenceCategory
+        android:key="charging"
+        android:title="@string/charging_category">
+
+        <com.android.settingslib.widget.SelectorWithWidgetPreference
+            android:key="charging_normal"
+            android:title="@string/charging_normal_title"
+            android:summary="@string/charging_normal_summary"
+            android:persistent="false" />
+
+        <com.android.settingslib.widget.SelectorWithWidgetPreference
+            android:key="charging_limit"
+            android:title="@string/charging_limit_title"
+            android:summary="@string/charging_limit_summary"
+            android:persistent="false" />
+
+        <com.android.settingslib.widget.SelectorWithWidgetPreference
+            android:key="charging_protect"
+            android:title="@string/charging_protect_title"
+            android:summary="@string/charging_protect_summary"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="battery"
+        android:title="@string/battery_category">
+
+        <SwitchPreferenceCompat
+            android:key="bypass_charging"
+            android:title="@string/bypass_title"
+            android:summary="@string/bypass_summary"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="standby_saver"
+            android:title="@string/standby_title"
+            android:summary="@string/standby_summary"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_maintenance"
+            android:title="@string/battery_maintenance_title"
+            android:summary="@string/battery_maintenance_summary"
+            android:persistent="false" />
+
+        <Preference
+            android:key="battery_info"
+            android:title="@string/battery_info_title"
+            android:selectable="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="display"
+        android:title="@string/display_category">
+
+        <SwitchPreferenceCompat
+            android:key="white_balance"
+            android:title="@string/white_balance_title"
+            android:summary="@string/white_balance_summary"
+            android:persistent="false" />
+
+        <SeekBarPreference
+            android:key="white_balance_strength"
+            android:dependency="white_balance"
+            android:title="@string/white_balance_strength_title"
+            android:summary="@string/white_balance_strength_summary"
+            android:min="0"
+            android:max="100"
+            android:defaultValue="100"
+            app:seekBarIncrement="10"
+            app:showSeekBarValue="true"
+            app:updatesContinuously="false"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pen"
+        android:title="@string/pen_category">
+
+        <Preference
+            android:key="pen_settings"
+            android:title="@string/pen_settings_title"
+            android:summary="@string/pen_settings_summary" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="keyboard"
+        android:title="@string/keyboard_category">
+
+        <Preference
+            android:key="physical_keyboard"
+            android:title="@string/lkb_physical_keyboard_title"
+            android:fragment="com.tb520fu.parts.KeyboardFragment" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="folio"
+        android:title="@string/folio_category">
+
+        <SwitchPreferenceCompat
+            android:key="folio_case_mode"
+            android:title="@string/lkb_folio_case_mode"
+            android:summary="@string/lkb_folio_case_mode_summary"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="memory"
+        android:title="@string/memory_category">
+
+        <ListPreference
+            android:key="vram_gb"
+            android:title="@string/vram_title"
+            android:dialogTitle="@string/vram_title"
+            android:persistent="false" />
+
+        <Preference
+            android:key="memory_status"
+            android:title="@string/memory_status_title"
+            android:selectable="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

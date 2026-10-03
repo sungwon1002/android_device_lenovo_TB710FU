@@ -1,0 +1,12 @@
+# Lenovo (Huaqin) hardware info, read by the sensors HAL
+genfscon sysfs /devices/virtual/huaqin/interface/hw_info u:object_r:vendor_sysfs_hw_info:s0
+
+# Lenovo pogo keyboard state (keyboard HAL)
+genfscon sysfs /devices/platform/soc/soc:lenovo_kb u:object_r:vendor_sysfs_lenovo_kb:s0
+
+# Touch panel pen id (touchscreen HAL)
+genfscon proc /Pen_ID u:object_r:vendor_proc_lenovo_touch:s0
+
+# Pen/keyboard wireless charging transmitter (pen attach, MAC, Qi commands)
+genfscon sysfs /devices/platform/soc/soc:qcom,pmic_glink/soc:qcom,pmic_glink:qcom,battery_charger/power_supply/wls_tx u:object_r:vendor_sysfs_wls_tx:s0
+genfscon sysfs /firmware/fdt u:object_r:vendor_sysfs_tb520fu_fdt:s0

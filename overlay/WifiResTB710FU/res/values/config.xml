@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- Values from the stock LapisRowWifiResOverlay and vendor WifiResTarget. -->
+<resources>
+    <bool name="config_wifi6ghzSupport">true</bool>
+    <bool name="config_wifiBridgedSoftApSupported">false</bool>
+    <bool name="config_wifiMultiStaLocalOnlyConcurrencyEnabled">true</bool>
+    <bool name="config_wifiMultiStaMultiInternetConcurrencyEnabled">false</bool>
+    <bool name="config_wifiMultiStaRestrictedConcurrencyEnabled">true</bool>
+    <bool name="config_wifiSaeH2eSupported">true</bool>
+    <bool name="config_wifiSoftap6ghzSupported">true</bool>
+    <bool name="config_wifiSoftapIeee80211beSupported">true</bool>
+    <bool name="config_wifiUpdateCountryCodeFromScanResultGeneric">false</bool>
+    <integer name="config_wifiDisableReasonByWrongPasswordThreshold">1</integer>
+    <string name="config_wifiP2pDeviceNamePrefix">Lenovo Yoga Tab Plus_</string>
+    <string name="wifi_tether_configure_ssid_default">Lenovo Yoga Tab Plus</string>
+
+    <!-- Stock QSSI common Wi-Fi values (WifiResCommon_Sys.apk), where they differ
+         from the defaults: larger TCP send buffers (4 MiB max), country code from
+         driver regulatory events, SoftAP features, connected MAC randomization -->
+    <bool name="config_wifiAllowMultipleNetworksOnSameAwareNdi">true</bool>
+    <bool name="config_wifiDriverSupportedNl80211RegChangedEvent">true</bool>
+    <bool name="config_wifiEnablePartialInitialScan">true</bool>
+    <bool name="config_wifiForcedSoftApRestartWhenCountryCodeChanged">false</bool>
+    <bool name="config_wifiNetworkCentricQosPolicyFeatureEnabled">true</bool>
+    <bool name="config_wifiSaeUpgradeOffloadEnabled">true</bool>
+    <bool name="config_wifiSoftApDynamicCountryCodeUpdateSupported">true</bool>
+    <bool name="config_wifiSoftapAcsIncludeDfs">true</bool>
+    <bool name="config_wifiSoftapHeSuBeamformeeSupported">true</bool>
+    <bool name="config_wifiSoftapHeSuBeamformerSupported">true</bool>
+    <bool name="config_wifiSoftapIeee80211axSupported">true</bool>
+    <bool name="config_wifiSoftapOweSupported">true</bool>
+    <bool name="config_wifiSoftapOweTransitionSupported">true</bool>
+    <bool name="config_wifiStaDynamicCountryCodeUpdateSupported">true</bool>
+    <bool name="config_wifi_background_scan_support">true</bool>
+    <bool name="config_wifi_connected_mac_randomization_supported">true</bool>
+    <bool name="config_wifi_only_link_same_credential_configurations">false</bool>
+    <bool name="config_wifi_p2p_mac_randomization_supported">true</bool>
+    <bool name="config_wifi_softap_acs_supported">true</bool>
+    <bool name="config_wifi_softap_ieee80211ac_supported">true</bool>
+    <bool name="config_wifi_softap_sae_supported">true</bool>
+    <string name="config_wifi_tcp_buffers">524288,1048576,2097152,524288,1048576,4194304</string>
+    <integer name="config_wifiBssidBlocklistMonitorApUnableToHandleNewStaThreshold">3</integer>
+    <integer name="config_wifiDelayDisconnectOnImsLostMs">1000</integer>
+    <integer name="config_wifiHardwareSoftapMaxClientCount">32</integer>
+    <integer name="config_wifiMaxNumWifiConfigurations">1000</integer>
+</resources>

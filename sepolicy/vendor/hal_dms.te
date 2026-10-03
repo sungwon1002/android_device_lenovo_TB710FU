@@ -1,0 +1,30 @@
+# Dolby DAX3 (vendor.dolby.hardware.dms@2.0), HIDL, from the stock vendor policy.
+hal_attribute(dms)
+
+type hal_dms_hwservice, hwservice_manager_type;
+type hal_dms_service, protected_service, service_manager_type;
+allow hal_dms_client hal_dms_service:service_manager find;
+allow hal_dms_server hal_dms_service:service_manager { add find };
+
+binder_call(hal_dms_client, hal_dms_server)
+binder_call(hal_dms_server, hal_dms_client)
+hal_attribute_hwservice(hal_dms, hal_dms_hwservice)
+
+type hal_dms_default, domain;
+hal_server_domain(hal_dms_default, hal_dms)
+type hal_dms_default_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_dms_default)
+hwbinder_use(hal_dms_default)
+
+# /data/vendor/dolby/dax_sqlite3.db
+allow hal_dms_default vendor_data_file:dir create_dir_perms;
+allow hal_dms_default vendor_data_file:file create_file_perms;
+
+# Clients: the audio HAL effects and the Dolby apps (daxService, DolbyAtmos)
+hal_client_domain(hal_audio_default, hal_dms)
+hal_client_domain(platform_app, hal_dms)
+hal_client_domain(platform_app_36, hal_dms)
+hal_client_domain(system_app, hal_dms)
+
+# daxService looks for the ZUI "zuimode" service, which PixelOS does not have
+dontaudit { platform_app platform_app_36 } default_android_service:service_manager find;

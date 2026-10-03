@@ -1,0 +1,10 @@
+# Package variant (dtb region) for the updater, see init.tb520fu.region.sh
+service vendor.tb520fu-region /vendor/bin/init.tb520fu.region.sh
+    class core
+    user root
+    group root
+    oneshot
+    disabled
+
+on early-boot
+    start vendor.tb520fu-region

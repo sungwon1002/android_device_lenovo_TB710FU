@@ -1,0 +1,99 @@
+From: TB520FU <tb520fu@localhost>
+Subject: [PATCH] ColorDisplayService: adjustable display white balance strength
+
+Settings.Secure display_white_balance_strength (0-100, default 100) pulls the
+white balance target CCT towards the nominal white point: 100 keeps the
+configured mapping (the stock ZUI one on the TB520FU), lower values make the
+tint weaker. Set from TB520FUParts (Lenovo features > Display).
+
+Also define the config_tb520fu_patch_wb_strength framework resource so
+TB520FUParts can tell whether this patch is applied.
+
+---
+diff --git a/services/core/java/com/android/server/display/color/ColorDisplayService.java b/services/core/java/com/android/server/display/color/ColorDisplayService.java
+index ce2fae2ff..bbb750eac 100644
+--- a/services/core/java/com/android/server/display/color/ColorDisplayService.java
++++ b/services/core/java/com/android/server/display/color/ColorDisplayService.java
+@@ -481,6 +481,9 @@ public final class ColorDisplayService extends SystemService {
+                             case Secure.DISPLAY_WHITE_BALANCE_ENABLED:
+                                 updateDisplayWhiteBalanceStatus();
+                                 break;
++                            case DISPLAY_WHITE_BALANCE_STRENGTH:
++                                onDisplayWhiteBalanceStrengthChanged();
++                                break;
+                             case Secure.REDUCE_BRIGHT_COLORS_ACTIVATED:
+                                 onReduceBrightColorsActivationChanged(/*userInitiated*/ true);
+                                 mHandler.sendEmptyMessage(MSG_APPLY_REDUCE_BRIGHT_COLORS);
+@@ -516,6 +519,8 @@ public final class ColorDisplayService extends SystemService {
+                 false /* notifyForDescendants */, mContentObserver, mCurrentUser);
+         cr.registerContentObserver(Secure.getUriFor(Secure.DISPLAY_WHITE_BALANCE_ENABLED),
+                 false /* notifyForDescendants */, mContentObserver, mCurrentUser);
++        cr.registerContentObserver(Secure.getUriFor(DISPLAY_WHITE_BALANCE_STRENGTH),
++                false /* notifyForDescendants */, mContentObserver, mCurrentUser);
+         cr.registerContentObserver(Secure.getUriFor(Secure.REDUCE_BRIGHT_COLORS_ACTIVATED),
+                 false /* notifyForDescendants */, mContentObserver, mCurrentUser);
+         cr.registerContentObserver(Secure.getUriFor(Secure.REDUCE_BRIGHT_COLORS_LEVEL),
+@@ -1020,6 +1025,36 @@ public final class ColorDisplayService extends SystemService {
+         return ldt.isBefore(compareTime) ? ldt.plusDays(1) : ldt;
+     }
+ 
++    /**
++     * How strongly display white balance follows the ambient light, in percent. The target CCT
++     * is pulled towards the nominal white point: 100 is the AOSP behaviour, 0 disables the tint.
++     */
++    private static final String DISPLAY_WHITE_BALANCE_STRENGTH = "display_white_balance_strength";
++    private static final int DISPLAY_WHITE_BALANCE_STRENGTH_DEFAULT = 100;
++
++    /** Last CCT requested by DisplayWhiteBalanceController, before the strength is applied. */
++    private int mRequestedDisplayWhiteBalanceCct = -1;
++
++    private int scaleDisplayWhiteBalanceCct(int cct) {
++        final int nominal = getContext().getResources()
++                .getInteger(R.integer.config_displayWhiteBalanceColorTemperatureDefault);
++        final int strength = Math.max(0, Math.min(100, Secure.getIntForUser(
++                getContext().getContentResolver(), DISPLAY_WHITE_BALANCE_STRENGTH,
++                DISPLAY_WHITE_BALANCE_STRENGTH_DEFAULT, mCurrentUser)));
++        return nominal + Math.round((cct - nominal) * strength / 100f);
++    }
++
++    private void onDisplayWhiteBalanceStrengthChanged() {
++        if (mRequestedDisplayWhiteBalanceCct <= 0) {
++            return;
++        }
++        mDisplayWhiteBalanceTintController.setTargetCct(
++                scaleDisplayWhiteBalanceCct(mRequestedDisplayWhiteBalanceCct));
++        if (mDisplayWhiteBalanceTintController.isActivated()) {
++            mHandler.sendEmptyMessage(MSG_APPLY_DISPLAY_WHITE_BALANCE);
++        }
++    }
++
+     @VisibleForTesting
+     void updateDisplayWhiteBalanceStatus() {
+         boolean oldActivated = mDisplayWhiteBalanceTintController.isActivated();
+@@ -1760,7 +1795,8 @@ public final class ColorDisplayService extends SystemService {
+          */
+         public boolean setDisplayWhiteBalanceColorTemperature(int cct) {
+             // Update the transform target CCT even if it can't be applied.
+-            mDisplayWhiteBalanceTintController.setTargetCct(cct);
++            mRequestedDisplayWhiteBalanceCct = cct;
++            mDisplayWhiteBalanceTintController.setTargetCct(scaleDisplayWhiteBalanceCct(cct));
+ 
+             if (mDisplayWhiteBalanceTintController.isActivated()) {
+                 mHandler.sendEmptyMessage(MSG_APPLY_DISPLAY_WHITE_BALANCE);
+diff --git a/core/res/res/values/tb520fu_patch_wb_strength.xml b/core/res/res/values/tb520fu_patch_wb_strength.xml
+new file mode 100644
+index 000000000..acb6d04a2
+--- /dev/null
++++ b/core/res/res/values/tb520fu_patch_wb_strength.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     SPDX-FileCopyrightText: 2026 The LineageOS Project
++     SPDX-License-Identifier: Apache-2.0
++-->
++<!-- Marker for the TB520FU display white balance strength framework patch.
++     The resource exists only while that patch is applied, so TB520FUParts can
++     show the white balance strength slider only on builds that have it. -->
++<resources>
++    <bool name="config_tb520fu_patch_wb_strength" translatable="false">true</bool>
++</resources>

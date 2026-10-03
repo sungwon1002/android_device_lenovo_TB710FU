@@ -1,0 +1,52 @@
+diff --git a/src/co/aospa/dolby/geq/data/EqualizerRepository.kt b/src/co/aospa/dolby/geq/data/EqualizerRepository.kt
+index e5f8d8a..b2bf7e0 100644
+--- a/src/co/aospa/dolby/geq/data/EqualizerRepository.kt
++++ b/src/co/aospa/dolby/geq/data/EqualizerRepository.kt
+@@ -110,7 +110,9 @@ class EqualizerRepository(private val context: Context) {
+     private companion object {
+         const val TAG = "EqRepository"
+ 
+-        val tenBandFreqs = intArrayOf(32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000)
++        // Center frequencies of the even DAX bands (every other of the 20 bands in
++        // vendor/etc/dolby/dax-default.xml), the ones the 10 sliders set directly.
++        val tenBandFreqs = intArrayOf(47, 234, 469, 844, 1313, 2250, 3750, 5813, 9000, 13875)
+ 
+         fun deserializeGains(bandGains: String): List<BandGain> {
+             val gains: List<Int> =
+diff --git a/src/co/aospa/dolby/geq/ui/BandGainSlider.kt b/src/co/aospa/dolby/geq/ui/BandGainSlider.kt
+index b28201d..7529d2a 100644
+--- a/src/co/aospa/dolby/geq/ui/BandGainSlider.kt
++++ b/src/co/aospa/dolby/geq/ui/BandGainSlider.kt
+@@ -29,18 +29,18 @@ import co.aospa.dolby.geq.data.BandGain
+ 
+ @Composable
+ fun BandGainSlider(bandGain: BandGain, onValueChangeFinished: (Int) -> Unit) {
+-    // Gain range is of -1->1 in UI, -100->100 in backend, but actually is -10->10 dB.
++    // Gain range is of -1->1 in UI, -160->160 in backend (1/16 dB steps), -10->10 dB.
+ 
+     // Ensure we update the slider when gain is changed,
+     // for eg. when changing the preset
+-    var sliderPosition by remember(bandGain.gain) { mutableFloatStateOf(bandGain.gain / 100f) }
++    var sliderPosition by remember(bandGain.gain) { mutableFloatStateOf(bandGain.gain / 160f) }
+ 
+     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+         SliderText("%.1f".format(sliderPosition * 10f))
+         Slider(
+             value = sliderPosition,
+             onValueChange = { sliderPosition = it },
+-            onValueChangeFinished = { onValueChangeFinished((sliderPosition * 100f).toInt()) },
++            onValueChangeFinished = { onValueChangeFinished((sliderPosition * 160f).toInt()) },
+             valueRange = -1f..1f,
+             modifier =
+                 Modifier.graphicsLayer {
+@@ -69,7 +69,9 @@ fun BandGainSlider(bandGain: BandGain, onValueChangeFinished: (Int) -> Unit) {
+         SliderText(
+             with(bandGain.band) {
+-                if (this >= 1000) {
++                if (this >= 1000 && this % 1000 == 0) {
+                     "${this / 1000}k"
++                } else if (this >= 1000) {
++                    "%.1fk".format(this / 1000f)
+                 } else {
+                     "$this"
+                 }

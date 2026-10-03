@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- The AOSP defaults plus the PC mode tile (TB710FUParts) at the end, which
+         fills the free last place of the third row on the tablet layout. -->
+    <string name="quick_settings_tiles_default" translatable="false">
+        internet,bt,dnd,cast,flashlight,airplane,rotation,wallet,alarm,controls,screenrecord,battery,custom(com.tb520fu.parts/.PcModeTileService)
+    </string>
+    <string name="quick_settings_tiles_default_split" translatable="false">
+        wifi,bt,cell,cast,dnd,wallet,airplane,rotation,flashlight,battery,alarm,controls,screenrecord,custom(com.tb520fu.parts/.PcModeTileService)
+    </string>
+</resources>

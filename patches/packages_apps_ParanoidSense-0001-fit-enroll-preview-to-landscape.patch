@@ -1,0 +1,44 @@
+diff --git a/src/co/aospa/sense/activities/EnrollActivity.kt b/src/co/aospa/sense/activities/EnrollActivity.kt
+index 265f3f3..85c0b8d 100644
+--- a/src/co/aospa/sense/activities/EnrollActivity.kt
++++ b/src/co/aospa/sense/activities/EnrollActivity.kt
+@@ -15,6 +15,7 @@ import android.widget.Toast
+ import androidx.core.app.ActivityCompat
+ import androidx.core.content.ContextCompat
+ import co.aospa.sense.R
++import co.aospa.sense.camera.CameraUtil
+ import co.aospa.sense.controller.FaceEnrollController
+ import co.aospa.sense.controller.FaceEnrollController.CameraCallback
+ import co.aospa.sense.util.Constants
+@@ -195,11 +196,31 @@ open class EnrollActivity : FaceBaseActivity() {
+         super.onApplyThemeResource(theme, resid, first)
+     }
+ 
++    // The 240x320dp preview surface assumes the 4:3 landscape camera frames
++    // are rotated to portrait. When the display rotation cancels the sensor
++    // orientation (e.g. a landscape tablet whose front camera is mounted at
++    // 270) the preview stays landscape, so swap the surface size instead of
++    // stretching the face.
++    private fun fitSurfaceToPreview() {
++        val cameraId = CameraUtil.getCameraId(this)
++        if (cameraId < 0) return
++        val info = Camera.CameraInfo()
++        Camera.getCameraInfo(cameraId, info)
++        val degrees = (display?.rotation ?: 0) * 90
++        if ((info.orientation + degrees) % 180 != 0) return
++        val lp = mSurfaceView?.layoutParams ?: return
++        val width = lp.width
++        lp.width = lp.height
++        lp.height = width
++        mSurfaceView?.layoutParams = lp
++    }
++
+     private fun init() {
+         setContentView(R.layout.face_enroll)
+         setHeaderText(R.string.face_enroll_title)
+         getLayout().setDescriptionText(R.string.face_enroll_description)
+         mSurfaceView = findViewById(R.id.camera_surface)
++        fitSurfaceToPreview()
+         mProgress = 0.0f
+         mSurfaceView?.setProgress(0.0f)
+         mEnrollVendorMessage = findViewById(R.id.face_vendor_message)

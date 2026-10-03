@@ -1,0 +1,9 @@
+# Converted from the stock ZUI keylayout by
+# tools/bringup/convert_keylayouts.py; ZUI-only keycodes remapped.
+key usage 0x0c0600   F13  # ZUI PEN_ONE_CLICK
+key usage 0x0c0601   F14  # ZUI PEN_TWO_CLICK
+key usage 0x0c0602   F15  # ZUI PEN_THREE_CLICK
+key usage 0x0c0603   F16  # ZUI PEN_LONG_CLICK
+key usage 0x0c0604   F17  # ZUI PEN_PRESS_CLICK
+key usage 0x0c0605   F18  # ZUI PEN_BT_DISCONNECT
+

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+
+     Physical keyboard page, laid out like the stock Lenovo one
+     (ZuiSettings xml/physical_keyboard_settings). The lkb_ strings are copied
+     from the stock app by tools/lenovo_keyboard_strings.py.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/lkb_physical_keyboard_title">
+
+    <PreferenceCategory
+        android:key="keyboard_options_category"
+        android:title="@string/lkb_keyboard_assistance_category">
+
+        <Preference
+            android:key="keyboard_shortcuts_helper"
+            android:title="@string/lkb_keyboard_shortcuts_helper"
+            android:summary="@string/lkb_keyboard_shortcuts_summary" />
+
+        <Preference
+            android:key="keyboard_shortcuts_switch"
+            android:title="@string/lkb_keyboard_shortcuts_switch"
+            android:fragment="com.tb520fu.parts.KeyboardShortcutsFragment" />
+
+        <Preference
+            android:key="modifier_keys_settings"
+            android:title="@string/lkb_modifier_keys_settings"
+            android:summary="@string/lkb_modifier_keys_settings_summary" />
+
+        <SwitchPreferenceCompat
+            android:key="keyboard_auto_backlight"
+            android:title="@string/lkb_keyboard_auto_brightness"
+            android:summary="@string/lkb_keyboard_auto_brightness_summary"
+            android:persistent="false" />
+
+        <Preference
+            android:key="physical_keyboard_repeat_keys"
+            android:title="@string/lkb_keyboard_repeat_keys_title"
+            android:summary="@string/lkb_keyboard_repeat_keys_summary" />
+
+        <Preference
+            android:key="physical_keyboard_a11y"
+            android:title="@string/lkb_keyboard_a11y_settings" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="keyboard_a11y_category"
+        android:title="@string/lkb_keyboard_a11y_category">
+
+        <SwitchPreferenceCompat
+            android:key="accessibility_sticky_keys"
+            android:title="@string/lkb_sticky_keys"
+            android:summary="@string/lkb_sticky_keys_summary"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="accessibility_bounce_keys"
+            android:title="@string/lkb_bounce_keys"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="accessibility_slow_keys"
+            android:title="@string/lkb_slow_keys"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="accessibility_mouse_keys"
+            android:title="@string/lkb_mouse_keys"
+            android:summary="@string/lkb_mouse_keys_summary"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="keyboard_pc_mode_connect_category">
+
+        <ListPreference
+            android:key="keyboard_connect_system_mode"
+            android:title="@string/lkb_pc_mode_keyboard_connect_system_mode"
+            android:dialogTitle="@string/lkb_pc_mode_keyboard_connect_system_mode"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="keyboard_touchpad_category"
+        android:title="@string/lkb_physical_keyboard_touchpad">
+
+        <SwitchPreferenceCompat
+            android:key="physical_keyboard_single_finger_touch"
+            android:title="@string/lkb_physical_keyboard_single_finger_touch"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="keyboard_touch_bright_screen"
+            android:title="@string/lkb_touch_or_swipe_wake_title"
+            android:summary="@string/lkb_keyboard_keyboard_touch_bright_screen_summary"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="trackpad_bottom_right_tap"
+            android:title="@string/lkb_trackpad_bottom_right_tap_title"
+            android:summary="@string/lkb_trackpad_bottom_right_tap_summary"
+            android:persistent="false" />
+
+        <SwitchPreferenceCompat
+            android:key="trackpad_reverse_scrolling"
+            android:title="@string/lkb_trackpad_reverse_scrolling_title"
+            android:summary="@string/lkb_trackpad_reverse_scrolling_summary2"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="keyboard_pointer_category"
+        android:title="@string/lkb_physical_keyboard_pointer">
+
+        <SeekBarPreference
+            android:key="touchpad_pointer_speed"
+            android:title="@string/lkb_pointer_speed"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="keyboard_shortcuts_category"
+        android:title="@string/lkb_keyboard_shortcut_application_key">
+
+        <Preference
+            android:key="key_shortcut_app1"
+            android:title="@string/lkb_keyboard_shortcut_application_key_app1" />
+
+        <Preference
+            android:key="key_shortcut_app2"
+            android:title="@string/lkb_keyboard_shortcut_application_key_app2" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="firmware_update_category">
+
+        <Preference
+            android:key="keyboard_firmware_update"
+            android:title="@string/lkb_solid_state_upgrade" />
+
+    </PreferenceCategory>
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="keyboard_tips"
+        android:title="@string/lkb_keyboard_tips"
+        android:selectable="false" />
+
+</PreferenceScreen>

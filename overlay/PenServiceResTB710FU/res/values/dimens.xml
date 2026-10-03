@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- The pen pages of the stock PenService are built for a full screen ZUI
+     window. Settings shows them in the right pane (~880dp wide here), whose
+     context still reports sw800dp, so battery_pen_width resolved to its
+     sw800dp value of 500dp and, with the list and item paddings on top, the
+     battery row was clipped on both sides. Shrink the pen row and use the
+     PixelOS list spacing. Every name below is defined by the target for this
+     qualifier (values/dimens.xml). -->
+<resources>
+    <!-- Pen row: the pen image is 320:22, the bt icon is square. -->
+    <dimen name="battery_pen_width">200dp</dimen>
+    <dimen name="bt_pen_status_width">26dp</dimen>
+
+    <!-- List paddings (BasePreferenceFragmentCompat sets the ListView padding
+         from pen_pref_padding; the items use list_common_padding_zui). -->
+    <dimen name="pen_pref_padding">16dp</dimen>
+    <dimen name="pen_pref_padding_zui14_5">16dp</dimen>
+    <dimen name="list_common_padding_zui">16dp</dimen>
+    <dimen name="list_text_vertical_padding_zui">12dp</dimen>
+    <dimen name="list_text_vertical_padding_zui_horizontal">12dp</dimen>
+    <dimen name="list_height_one_line_zui">56dp</dimen>
+
+    <!-- Typography: Settings titles are 16sp (TextAppearance.SettingsLib.
+         BodyLarge/TitleMedium), the ZUI pen list uses 18sp at sw400dp. -->
+    <dimen name="text_size_list_item_zui">16sp</dimen>
+
+    <!-- The ZUI icon frame pulls its icon 4dp out of the item padding. -->
+    <dimen name="preference_icon_start_margin">0dp</dimen>
+</resources>

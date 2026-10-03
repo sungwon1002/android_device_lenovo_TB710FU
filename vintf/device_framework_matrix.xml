@@ -1,0 +1,46 @@
+<compatibility-matrix version="1.0" type="framework">
+    <!-- Goodix fingerprint daemon interface, declared by the stock
+         fingerprint-example.xml fragment next to IFingerprint/default -->
+    <hal format="aidl">
+        <name>vendor.goodix.hardware.biometrics.fingerprint.cap</name>
+        <version>1</version>
+        <interface>
+            <name>IGoodixFingerprintDaemon</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Lenovo HALs used by the pen/keyboard bridge (input/) -->
+    <hal format="aidl" optional="true">
+        <name>vendor.lenovo.hardware.battery</name>
+        <version>4</version>
+        <interface>
+            <name>IBattery</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.lenovo.hardware.keyboard</name>
+        <version>2</version>
+        <interface>
+            <name>IKeyboard</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.lenovo.hardware.touchscreen</name>
+        <version>2</version>
+        <interface>
+            <name>ITouchscreen</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Dolby Atmos (DAX3) dms HAL, used by the dap effect and daxService -->
+    <hal format="hidl" optional="true">
+        <name>vendor.dolby.hardware.dms</name>
+        <version>2.0</version>
+        <interface>
+            <name>IDms</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+</compatibility-matrix>

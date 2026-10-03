@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- The natural orientation is portrait; start in landscape (ROTATION_90). -->
+    <integer name="def_user_rotation">1</integer>
+
+    <!-- Adaptive brightness on from first boot -->
+    <bool name="def_screen_brightness_automatic_mode">true</bool>
+</resources>

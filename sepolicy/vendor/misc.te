@@ -1,0 +1,51 @@
+# Denials seen in permissive mode that need a rule or are harmless probes.
+
+# Camera HAL: the Lenovo camx build walks every property area; it only needs
+# its own vendor.camera/main_back properties.
+dontaudit hal_camera_default property_type:file { getattr map open read };
+set_prop(hal_camera_default, vendor_camera_prop)
+
+# qseecomd: RPMB over the UFS bsg nodes, PFM storage file created before
+# persist was labeled
+allow tee unlabeled:dir search;
+allow tee unlabeled:file { read write append open getattr };
+
+# e2fsck on lenovocust at boot
+allow fsck lenovocust_block_device:blk_file rw_file_perms;
+
+dontaudit kernel vendor_modprobe:key search;
+
+# Probes without effect
+dontaudit zygote property_type:file { getattr map open read };
+dontaudit { bootanim surfaceflinger priv_app } vendor_hal_qspmhal_default:binder call;
+dontaudit priv_app vendor_hal_qspmhal_service:service_manager find;
+dontaudit vendor_init default_prop:file read;
+dontaudit vendor_init cgroup:file getattr;
+
+# WLAN MAC on persist: vendor_init relabels it (restorecon of persist), the
+# qca_cld driver reads it from a kernel worker
+allow vendor_init vendor_persist_wlan_file:dir { relabelto setattr r_dir_perms };
+allow vendor_init vendor_persist_wlan_file:file { relabelto setattr r_file_perms };
+r_dir_file(kernel, vendor_persist_wlan_file)
+
+# ro.vendor.config.lgsi.* (vendor.prop): set by vendor_init, read by PenService
+# (system_app) and ZuiUDevice (platform app)
+set_prop(vendor_init, vendor_lenovo_config_prop)
+get_prop(system_app, vendor_lenovo_config_prop)
+get_prop({ platform_app platform_app_36 }, vendor_lenovo_config_prop)
+
+# Pen charger (power_supply/wls_tx): tb520fu-input reads attach state and MAC,
+# the battery HAL sends Qi commands
+allow system_server vendor_sysfs_wls_tx:dir r_dir_perms;
+allow system_server vendor_sysfs_wls_tx:file r_file_perms;
+allow hal_lenovobattery_default vendor_sysfs_wls_tx:dir r_dir_perms;
+allow hal_lenovobattery_default vendor_sysfs_wls_tx:file rw_file_perms;
+
+# Goodix fingerprint HAL
+dontaudit hal_fingerprint_default self:capability { dac_override dac_read_search };
+dontaudit hal_fingerprint_default system_prop:property_service set;
+dontaudit init hal_fingerprint_default:process ptrace;
+
+# Probes without effect
+dontaudit hal_audio_default boot_status_prop:file read;
+dontaudit kernel mnt_vendor_file:dir search;

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <dimen name="list_common_padding_zui">16dp</dimen>
+    <dimen name="list_text_vertical_padding_zui_horizontal">12dp</dimen>
+    <dimen name="text_size_list_item_zui">16sp</dimen>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Dynamic profile by default (needs patches/packages_apps_DolbyAtmos-0001);
+         Dolby itself is on by default in the app. -->
+    <string name="dolby_default_profile" translatable="false">0</string>
+</resources>

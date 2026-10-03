@@ -1,0 +1,92 @@
+//
+// SPDX-FileCopyrightText: 2026 The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+// Stock Lenovo keyboard firmware updaters (ZuiKeyboardUpdate for the pogo pin
+// keyboards, ZuiKeyboardUpdateOlympia) with a small compat dex prepended: a
+// replacement of their androidx.startup.InitializationProvider registers
+// PixelStyle, which restyles the firmware update page like the PixelOS
+// Settings pages. The stock APKs come from the vendor tree
+// (proprietary-files.txt: EXTRACT_ONLY, FILEGROUP *-stock); the dex prepend
+// tool lives in the PenService namespace. Listed in PRODUCT_SOONG_NAMESPACES
+// in device.mk.
+//
+
+soong_namespace {
+    imports: [
+        "device/lenovo/TB710FU/lenovo/PenService",
+        "vendor/lenovo/TB710FU",
+    ],
+}
+
+java_library {
+    name: "KeyboardUpdateCompatStubs",
+    srcs: ["stubs/**/*.java"],
+    platform_apis: true,
+    installable: false,
+}
+
+java_library {
+    name: "KeyboardUpdateCompat",
+    srcs: ["src/**/*.java"],
+    libs: ["KeyboardUpdateCompatStubs"],
+    platform_apis: true,
+    installable: false,
+}
+
+java_genrule {
+    name: "ZuiKeyboardUpdate-compat-apk",
+    srcs: [
+        ":KeyboardUpdateCompat",
+        ":ZuiKeyboardUpdate-stock",
+    ],
+    tools: [
+        "d8",
+        "tb520fu_prepend_dex",
+    ],
+    out: ["ZuiKeyboardUpdate.apk"],
+    cmd: "$(location d8) --release --no-desugaring --min-api 35 " +
+        "--output $(genDir)/compat.zip $(location :KeyboardUpdateCompat) && " +
+        "$(location tb520fu_prepend_dex) --apk $(location :ZuiKeyboardUpdate-stock) " +
+        "--dex-zip $(genDir)/compat.zip --out $(out)",
+}
+
+java_genrule {
+    name: "ZuiKeyboardUpdateOlympia-compat-apk",
+    srcs: [
+        ":KeyboardUpdateCompat",
+        ":ZuiKeyboardUpdateOlympia-stock",
+    ],
+    tools: [
+        "d8",
+        "tb520fu_prepend_dex",
+    ],
+    out: ["ZuiKeyboardUpdateOlympia.apk"],
+    cmd: "$(location d8) --release --no-desugaring --min-api 35 " +
+        "--output $(genDir)/compat.zip $(location :KeyboardUpdateCompat) && " +
+        "$(location tb520fu_prepend_dex) --apk $(location :ZuiKeyboardUpdateOlympia-stock) " +
+        "--dex-zip $(genDir)/compat.zip --out $(out)",
+}
+
+// android.uid.system, like Settings, so it opens in the Settings right pane.
+android_app_import {
+    name: "ZuiKeyboardUpdate",
+    apk: ":ZuiKeyboardUpdate-compat-apk",
+    certificate: "platform",
+    system_ext_specific: true,
+    dex_preopt: {
+        enabled: false,
+    },
+}
+
+// Stock: presigned by Lenovo. The prepended dex needs a new signature; the
+// platform one keeps it a trusted system app.
+android_app_import {
+    name: "ZuiKeyboardUpdateOlympia",
+    apk: ":ZuiKeyboardUpdateOlympia-compat-apk",
+    certificate: "platform",
+    system_ext_specific: true,
+    dex_preopt: {
+        enabled: false,
+    },
+}

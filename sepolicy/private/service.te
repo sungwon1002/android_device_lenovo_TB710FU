@@ -1,0 +1,6 @@
+# Services published by tb520fu-input (input/) in system_server for the
+# stock Lenovo PenService: pen writing haptics and ZUI notifications.
+type zui_pen_haptic_service, app_api_service, system_server_service, service_manager_type;
+type zui_notification_service, app_api_service, system_server_service, service_manager_type;
+# Raw keyboard access for the platform-signed firmware updater (stock: same type)
+type zui_keyboard_manager_service, system_server_service, service_manager_type;

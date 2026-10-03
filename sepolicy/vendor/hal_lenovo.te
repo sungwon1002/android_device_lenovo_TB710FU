@@ -1,0 +1,64 @@
+# Lenovo vendor HALs (vendor.lenovo.hardware.*), stock AIDL services.
+# Types and rules follow the stock ZUI_17.5.10.362 vendor policy.
+
+hal_attribute(lenovobattery)
+hal_attribute(lenovokeyboard)
+hal_attribute(lenovotouchscreen)
+
+type hal_lenovobattery_service, protected_service, service_manager_type;
+type hal_lenovokeyboard_service, protected_service, service_manager_type;
+type hal_lenovotouchscreen_service, protected_service, service_manager_type;
+
+binder_call(hal_lenovobattery_client, hal_lenovobattery_server)
+binder_call(hal_lenovobattery_server, hal_lenovobattery_client)
+add_service(hal_lenovobattery_server, hal_lenovobattery_service)
+allow hal_lenovobattery_client hal_lenovobattery_service:service_manager find;
+
+binder_call(hal_lenovokeyboard_client, hal_lenovokeyboard_server)
+binder_call(hal_lenovokeyboard_server, hal_lenovokeyboard_client)
+add_service(hal_lenovokeyboard_server, hal_lenovokeyboard_service)
+allow hal_lenovokeyboard_client hal_lenovokeyboard_service:service_manager find;
+
+binder_call(hal_lenovotouchscreen_client, hal_lenovotouchscreen_server)
+binder_call(hal_lenovotouchscreen_server, hal_lenovotouchscreen_client)
+add_service(hal_lenovotouchscreen_server, hal_lenovotouchscreen_service)
+allow hal_lenovotouchscreen_client hal_lenovotouchscreen_service:service_manager find;
+
+# Battery: charge limits, protection, maintenance, bypass, pen Qi (wls_tx/cmd)
+type hal_lenovobattery_default, domain;
+hal_server_domain(hal_lenovobattery_default, hal_lenovobattery)
+type hal_lenovobattery_default_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_lenovobattery_default)
+binder_use(hal_lenovobattery_default)
+r_dir_file(hal_lenovobattery_default, sysfs_batteryinfo)
+allow hal_lenovobattery_default { vendor_sysfs_battery_supply vendor_sysfs_usb_supply }:dir r_dir_perms;
+allow hal_lenovobattery_default { vendor_sysfs_battery_supply vendor_sysfs_usb_supply }:file rw_file_perms;
+allow hal_lenovobattery_default sysfs:dir r_dir_perms;
+allow hal_lenovobattery_default sysfs:file rw_file_perms;
+
+# Keyboard (Olympia pogo keyboard on ttyHS1)
+type hal_lenovokeyboard_default, domain;
+hal_server_domain(hal_lenovokeyboard_default, hal_lenovokeyboard)
+type hal_lenovokeyboard_default_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_lenovokeyboard_default)
+binder_use(hal_lenovokeyboard_default)
+allow hal_lenovokeyboard_default lenovo_keyboard_device:chr_file rw_file_perms;
+allow hal_lenovokeyboard_default vendor_sysfs_lenovo_kb:dir r_dir_perms;
+allow hal_lenovokeyboard_default vendor_sysfs_lenovo_kb:file rw_file_perms;
+
+# Touchscreen (pen mode, pen BLE state, double tap gesture, haptics via ioctl)
+type hal_lenovotouchscreen_default, domain;
+hal_server_domain(hal_lenovotouchscreen_default, hal_lenovotouchscreen)
+type hal_lenovotouchscreen_default_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_lenovotouchscreen_default)
+binder_use(hal_lenovotouchscreen_default)
+allow hal_lenovotouchscreen_default vendor_proc_lenovo_touch:file rw_file_perms;
+allow hal_lenovotouchscreen_default proc:file rw_file_perms;
+
+# Clients: tb520fu-input in system_server
+hal_client_domain(system_server, hal_lenovobattery)
+hal_client_domain(system_server, hal_lenovokeyboard)
+hal_client_domain(system_server, hal_lenovotouchscreen)
+
+# /dev/lenovo_penraw, used by PenService
+allow system_app lenovo_device:chr_file rw_file_perms;

@@ -1,0 +1,24 @@
+type vendor_sysfs_hw_info, sysfs_type, fs_type;
+
+# Lenovo keyboard (soc:lenovo_kb) and touch panel pen id (/proc/Pen_ID)
+type vendor_sysfs_lenovo_kb, sysfs_type, fs_type;
+type vendor_proc_lenovo_touch, proc_type, fs_type;
+
+# Lenovo devices: pogo keyboard UART, pen raw node, Goodix fingerprint sensor
+type lenovo_keyboard_device, dev_type;
+type lenovo_device, dev_type;
+type goodix_fp_device, dev_type;
+
+# lenovocust (Lenovo customization, ext4) checked by e2fsck at boot
+type lenovocust_block_device, dev_type;
+
+
+# WLAN MAC on persist (/mnt/vendor/persist/kiwi_v2), read by the qca_cld
+# driver in the kernel (built with PANIC_ON_BUG: a failed read panics)
+type vendor_persist_wlan_file, file_type;
+
+# Pen/keyboard wireless charging transmitter (power_supply/wls_tx)
+type vendor_sysfs_wls_tx, sysfs_type, fs_type;
+
+# /sys/firmware/fdt (running device tree), read by init.tb520fu.region.sh
+type vendor_sysfs_tb520fu_fdt, sysfs_type, fs_type;

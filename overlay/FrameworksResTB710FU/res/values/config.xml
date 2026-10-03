@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- Values from the stock LapisRowFrameworksOverlay (ZUI_17.5.10.362) unless noted.
+     config_autoBrightnessDisplayValuesNits is raised: the stock curve gave
+     ~85 nits indoors without the ZUI framework boost. -->
+<resources>
+    <!-- Brightness -->
+    <bool name="config_automatic_brightness_available">true</bool>
+
+    <integer-array name="config_autoBrightnessLevels">
+        <item>5</item>
+        <item>15</item>
+        <item>40</item>
+        <item>100</item>
+        <item>180</item>
+        <item>400</item>
+        <item>550</item>
+        <item>1000</item>
+        <item>1500</item>
+        <item>2000</item>
+        <item>2500</item>
+        <item>3000</item>
+        <item>4000</item>
+        <item>5000</item>
+    </integer-array>
+
+    <array name="config_autoBrightnessDisplayValuesNits">
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+        <item>150</item>
+        <item>180</item>
+        <item>230</item>
+        <item>270</item>
+        <item>320</item>
+        <item>380</item>
+        <item>440</item>
+        <item>500</item>
+        <item>560</item>
+        <item>620</item>
+        <item>650</item>
+    </array>
+
+    <integer-array name="config_screenBrightnessBacklight">
+        <item>0</item>
+        <item>4</item>
+        <item>12</item>
+        <item>27</item>
+        <item>39</item>
+        <item>47</item>
+        <item>59</item>
+        <item>71</item>
+        <item>82</item>
+        <item>106</item>
+        <item>133</item>
+        <item>165</item>
+        <item>188</item>
+        <item>216</item>
+        <item>255</item>
+    </integer-array>
+
+    <array name="config_screenBrightnessNits">
+        <item>0</item>
+        <item>8</item>
+        <item>30</item>
+        <item>70</item>
+        <item>100</item>
+        <item>120</item>
+        <item>150</item>
+        <item>180</item>
+        <item>210</item>
+        <item>270</item>
+        <item>340</item>
+        <item>420</item>
+        <item>480</item>
+        <item>550</item>
+        <item>650</item>
+    </array>
+
+    <integer name="config_autoBrightnessBrighteningLightDebounce">2000</integer>
+    <integer name="config_autoBrightnessDarkeningLightDebounce">3000</integer>
+    <item name="config_screenBrightnessDimFloat" format="float" type="dimen">0.15</item>
+    <item name="config_screenBrightnessSettingDefaultFloat" format="float" type="dimen">0.2862</item>
+    <item name="config_screenBrightnessSettingMaximumFloat" format="float" type="dimen">1.0</item>
+    <item name="config_screenBrightnessSettingMinimumFloat" format="float" type="dimen">0.000977</item>
+    <integer name="config_screenBrightnessSettingDefault">73</integer>
+    <integer name="config_screenBrightnessSettingMinimum">1</integer>
+
+    <!-- Night display -->
+    <string-array name="config_nightDisplayColorTemperatureCoefficients">
+        <item>0.0</item>
+        <item>0.0</item>
+        <item>1.0</item>
+        <item>-0.00000000962353339</item>
+        <item>0.000153045476</item>
+        <item>0.390782778</item>
+        <item>-0.0000000189359041</item>
+        <item>0.000302412211</item>
+        <item>-0.298650895</item>
+    </string-array>
+    <string-array name="config_nightDisplayColorTemperatureCoefficientsNative">
+        <item>0.0</item>
+        <item>0.0</item>
+        <item>1.0</item>
+        <item>-0.00000000962353339</item>
+        <item>0.000153045476</item>
+        <item>0.390782778</item>
+        <item>-0.0000000189359041</item>
+        <item>0.000302412211</item>
+        <item>-0.298650895</item>
+    </string-array>
+    <integer name="config_nightDisplayColorTemperatureDefault">5000</integer>
+    <integer name="config_nightDisplayColorTemperatureMax">6000</integer>
+    <integer name="config_nightDisplayColorTemperatureMin">4000</integer>
+
+    <!-- Light theme by default (vendor/lineage sets dark, 2) -->
+    <integer name="config_defaultNightMode">1</integer>
+
+    <!-- Screen off/on animation -->
+    <integer name="config_colorFadeOffDurations">30</integer>
+    <integer name="config_colorFadeOnDurations">250</integer>
+
+    <!-- Audio -->
+    <integer name="config_safe_media_volume_index">11</integer>
+    <integer name="config_safe_media_volume_usb_mB">-1900</integer>
+
+    <!-- Refresh rate: adaptive up to 120 Hz by default like ZUI; 144 Hz is
+         meant to be used only as a fixed rate (Settings: 144 + VRR off). -->
+    <integer name="config_defaultRefreshRate">0</integer>
+    <integer name="config_defaultPeakRefreshRate">120</integer>
+
+    <!-- Memory extension: let StorageManagerService schedule the zram
+         writeback job (the backing file comes from fstab.zram.N) -->
+    <bool name="config_zramWriteback">true</bool>
+
+    <!-- From the stock vendor FrameworksResTarget_Vendor overlay -->
+    <bool name="config_powerDecoupleAutoSuspendModeFromDisplay">true</bool>
+    <!-- Without this WindowManager reports no navigation bar, so SystemUI
+         never creates the taskbar and the back gesture handler. -->
+    <bool name="config_showNavigationBar">true</bool>
+    <bool name="config_useDevInputEventForAudioJack">true</bool>
+
+    <!-- Color modes (Settings > Display > Colors): Natural, Boosted, Adaptive.
+         Adaptive (persist.sys.sf.native_mode=2, system_ext.prop) is the default.
+         Without any color mode ColorDisplayService never activates white balance
+         (DisplayTransformManager.needsLinearColorMatrix() is false). -->
+    <integer-array name="config_availableColorModes">
+        <item>0</item>
+        <item>1</item>
+        <item>3</item>
+    </integer-array>
+
+    <!-- Adaptive white balance ("True Tone"): the tcs3408 RGB sensor reports the
+         ambient color temperature in Kelvin as values[0] of qti.sensor.rgb.
+         Switch and strength slider: Lenovo features (TB710FUParts); the Settings
+         switch is hidden (SettingsResTB710FU).
+         The mapping follows the stock ZUI one (AutoColorTempUtil.convertAmbient2Screen):
+         ambient <3000K -> 5800K, 3000-4000 -> 6100, 4000-5000 -> 6500 (neutral),
+         5000-6000 -> 7100, 6000-7000 -> 7800, 7000-8000 -> 8500, >8000 -> 9500;
+         below 50 lux neutral, above 1000 lux 7500K. Without a mapping AOSP shows the
+         ambient CCT itself, which made indoor light very yellow. -->
+    <bool name="config_displayWhiteBalanceAvailable">true</bool>
+    <!-- On by default (after a factory reset), like the stock natural color -->
+    <bool name="config_displayWhiteBalanceEnabledDefault">true</bool>
+    <string name="config_displayWhiteBalanceColorTemperatureSensorName" translatable="false">qti.sensor.rgb</string>
+    <integer name="config_displayWhiteBalanceColorTemperatureMin">5800</integer>
+    <integer name="config_displayWhiteBalanceColorTemperatureMax">9500</integer>
+    <array name="config_displayWhiteBalanceAmbientColorTemperatures">
+        <item>2800.0</item>
+        <item>3500.0</item>
+        <item>4500.0</item>
+        <item>5500.0</item>
+        <item>6500.0</item>
+        <item>7500.0</item>
+        <item>8500.0</item>
+    </array>
+    <array name="config_displayWhiteBalanceDisplayColorTemperatures">
+        <item>5800.0</item>
+        <item>6100.0</item>
+        <item>6500.0</item>
+        <item>7100.0</item>
+        <item>7800.0</item>
+        <item>8500.0</item>
+        <item>9500.0</item>
+    </array>
+    <!-- Low light: neutral below 40 lux (4500K ambient maps to 6500K) -->
+    <array name="config_displayWhiteBalanceLowLightAmbientBrightnesses">
+        <item>40.0</item>
+        <item>50.0</item>
+    </array>
+    <array name="config_displayWhiteBalanceLowLightAmbientBiases">
+        <item>0.0</item>
+        <item>1.0</item>
+    </array>
+    <item name="config_displayWhiteBalanceLowLightAmbientColorTemperature" format="float" type="dimen">4500.0</item>
+    <!-- Bright daylight: 7500K above 1000 lux (6000K ambient maps to 7450K) -->
+    <array name="config_displayWhiteBalanceHighLightAmbientBrightnesses">
+        <item>900.0</item>
+        <item>1000.0</item>
+    </array>
+    <array name="config_displayWhiteBalanceHighLightAmbientBiases">
+        <item>0.0</item>
+        <item>1.0</item>
+    </array>
+    <item name="config_displayWhiteBalanceHighLightAmbientColorTemperature" format="float" type="dimen">6000.0</item>
+
+    <!-- Double tap to wake: Settings > Display > Tap to wake, applied to the
+         touch panel by input/DoubleTapWake.java -->
+    <bool name="config_supportDoubleTapWake">true</bool>
+
+    <!-- Lenovo pen / keyboard / battery bridge (input/), loaded into
+         system_server by PhoneWindowManager -->
+    <string-array name="config_deviceKeyHandlerLibs" translatable="false">
+        <item>/system_ext/framework/tb520fu-input.jar</item>
+    </string-array>
+    <string-array name="config_deviceKeyHandlerClasses" translatable="false">
+        <item>com.tb520fu.input.KeyHandler</item>
+    </string-array>
+
+    <!-- Apps offered for Lenovo pen writing haptics, stock list (ZUI_17.5.10.362).
+         Needs patches/frameworks_base-0001 (defines the array). -->
+    <string-array name="config_stylus_pen_haptic_packages" translatable="false">
+        <item>net.huanci.hsjpro</item>
+        <item>kr.neolab.neonote</item>
+        <item>jp.co.celsys.clipstudiopaint.googleplay</item>
+        <item>easynotes.notes.note.notepad.notebook.privatenotes.note</item>
+        <item>com.ZWSoft.ZWCAD</item>
+        <item>com.zui.notes</item>
+        <item>com.youdao.note</item>
+        <item>com.xodo.pdf.reader</item>
+        <item>com.wacom.signpropdf</item>
+        <item>com.wacom.bamboopapertab</item>
+        <item>com.vson.edraw</item>
+        <item>com.vistrav.whiteboard</item>
+        <item>com.ttluoshi.drawapp</item>
+        <item>com.tophatch.concepts.china</item>
+        <item>com.tophatch.concepts</item>
+        <item>com.steadfastinnovation.android.projectpapyrus</item>
+        <item>com.sonymobile.sketch</item>
+        <item>com.newskyer.draw</item>
+        <item>com.myscript.nebo</item>
+        <item>com.myscript.calculator</item>
+        <item>com.mubu.app</item>
+        <item>com.microsoft.office.onenote</item>
+        <item>com.medibang.android.paint.tablet</item>
+        <item>com.medibang.android.jumppaint</item>
+        <item>com.liubowang.drawingboard</item>
+        <item>com.kdanmobile.android.pdfreader.google.pad</item>
+        <item>com.jideos.jnotes</item>
+        <item>com.infraware.office.link</item>
+        <item>com.hlg.daydaytobusiness</item>
+        <item>com.google.android.keep</item>
+        <item>com.goodnotepad.smarttodolistnote</item>
+        <item>com.foxit.mobile.pdf.lite</item>
+        <item>com.flexcil.flexcilnote</item>
+        <item>com.eyewind.paperone</item>
+        <item>com.yinxiang</item>
+        <item>com.evernote</item>
+        <item>com.dencreak.esmemo</item>
+        <item>com.color365.sketch</item>
+        <item>com.brakefield.painter</item>
+        <item>com.brakefield.idfree</item>
+        <item>com.axis.drawingdesk.v3</item>
+        <item>com.adsk.sketchbook</item>
+        <item>com.pick.sketchbook</item>
+        <item>cn.canva.editor</item>
+        <item>jp.ne.ibis.ibispaintx.app</item>
+        <item>com.tayasui.sketches</item>
+        <item>jp.ne.ibis.ibispaint.app</item>
+        <item>com.picsart.draw</item>
+        <item>com.bytestorm.artflow</item>
+        <item>com.topstack.kilonotes.pad</item>
+        <item>com.delgeo.desygner</item>
+        <item>com.orion.notein</item>
+        <item>com.adobe.reader</item>
+        <item>com.officetoolsapps.document.reader.editor</item>
+        <item>com.adobe.fas</item>
+        <item>com.penly.planner.notes.tasks.reminders</item>
+        <item>com.fluidtouch.noteshelf2</item>
+        <item>com.viettran.INKrediblePro</item>
+        <item>com.acadoid.lecturenotes</item>
+        <item>com.zoho.notebook</item>
+        <item>note.notepad.todo.notebook</item>
+        <item>io.notewise.app</item>
+        <item>com.yocto.wenote</item>
+        <item>com.kreoSoft.Notepad</item>
+        <item>com.cga.my.color.note.notepad</item>
+        <item>note.notepad.diary.notebook</item>
+        <item>com.litewhite.notemaster.free</item>
+        <item>org.mightyfrog.android.simplenotepad</item>
+        <item>evansir.securenotepad</item>
+        <item>com.eyewind.paperonefree</item>
+        <item>org.gimp.GIMP</item>
+        <item>org.hermit.simpledrawpro</item>
+        <item>drawsketch.com.sketchpad.drawing.painting</item>
+        <item>org.n0n3m4.nomad</item>
+        <item>drawingapps.drawingsketchpad.paintingtools</item>
+        <item>com.royole.rydrawing</item>
+        <item>com.fiistudio.fiinote</item>
+        <item>com.nineton.shouzhang</item>
+        <item>com.chenupt.text</item>
+        <item>com.luyun.lightnote</item>
+        <item>com.videocutting.editor</item>
+        <item>com.sygd.gdpaintfive</item>
+        <item>jp.ne.ibis.ibispaintx.app.hms</item>
+        <item>net.huanci.hsj</item>
+        <item>com.moonlight.huatu</item>
+        <item>com.wyart.setfourpaper</item>
+        <item>com.zq.hand_drawn</item>
+        <item>com.littlez.draw</item>
+        <item>com.zh.drawworld</item>
+        <item>com.lloo.w.painting</item>
+        <item>com.painting.draw</item>
+        <item>com.google.android.apps.docs</item>
+    </string-array>
+</resources>

@@ -1,0 +1,10 @@
+# Converted from the stock ZUI keylayout by
+# tools/bringup/convert_keylayouts.py; ZUI-only keycodes remapped.
+# Tab Pen Pro 2 (0x622e): same barrel gestures as the Tab Pen Pro (0x61a1).
+key usage 0x0c0601   F14  # ZUI PEN_TWO_CLICK
+key usage 0x0c0610   F19  # ZUI PEN_360_THREE_CLICK
+key usage 0x0c0611   F20  # ZUI PEN_D_LONG_PRESS
+key usage 0x0c0612   F21  # ZUI PEN_D_SLIDE_DOWN
+key usage 0x0c0613   F22  # ZUI PEN_D_SLIDE_UP
+key usage 0x0c0614   F23  # ZUI PEN_D_CLICK
+

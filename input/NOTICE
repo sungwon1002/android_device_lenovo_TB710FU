@@ -1,0 +1,7 @@
+tb520fu-input contains logic ported from the Lenovo ZUI system services of the
+stock TB710FU firmware (services.jar: com.zui.server.input.*,
+com.lenovo.lgsi.server.battery.*), including GATT UUIDs, command encodings,
+broadcast contracts and settings keys used by the Lenovo PenService and
+ZuiUDevice apps. That part is Lenovo-derived and is only meant for this
+non-commercial unofficial build; it is not covered by the Apache-2.0 header
+of the surrounding glue code.

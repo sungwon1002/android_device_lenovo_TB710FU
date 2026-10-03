@@ -1,0 +1,35 @@
+From: TB520FU <tb520fu@localhost>
+Subject: [PATCH] Settings: allow hiding the display white balance switch
+
+config_show_display_white_balance (default true). The TB520FU turns it off
+with an RRO and offers white balance with a strength slider in its own
+TB520FUParts (Lenovo features) instead.
+
+---
+diff --git a/res/values/config.xml b/res/values/config.xml
+index f836ad1..b92f680 100644
+--- a/res/values/config.xml
++++ b/res/values/config.xml
+@@ -1096,4 +1096,8 @@
+ 
+     <!-- TODO(b/496286136): Whether to force showing the icon on the locale picker screen. -->
+     <bool name="config_force_showing_icon_on_locale_picker_screen">false</bool>
++
++    <!-- Whether Settings > Display shows the display white balance switch. A device can
++         turn it off when it offers the setting elsewhere. -->
++    <bool name="config_show_display_white_balance">true</bool>
+ </resources>
+diff --git a/src/com/android/settings/display/DisplayWhiteBalancePreferenceController.java b/src/com/android/settings/display/DisplayWhiteBalancePreferenceController.java
+index 9a01825..d1e9726 100644
+--- a/src/com/android/settings/display/DisplayWhiteBalancePreferenceController.java
++++ b/src/com/android/settings/display/DisplayWhiteBalancePreferenceController.java
+@@ -32,6 +32,9 @@ public class DisplayWhiteBalancePreferenceController extends TogglePreferenceCon
+ 
+     @Override
+     public int getAvailabilityStatus() {
++        if (!mContext.getResources().getBoolean(R.bool.config_show_display_white_balance)) {
++            return UNSUPPORTED_ON_DEVICE;
++        }
+         ColorDisplayManager cdm = getColorDisplayManager();
+         // Display white balance is only valid in linear light space. COLOR_MODE_SATURATED
+         // implies unmanaged color mode, and hence unknown color processing conditions.

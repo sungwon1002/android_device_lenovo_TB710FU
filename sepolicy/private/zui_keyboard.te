@@ -1,0 +1,3 @@
+# lenovokeyboard: only system and platform-signed apps (the keyboard firmware
+# updater runs as platform_app), as stock
+allow { platform_app priv_app system_app } zui_keyboard_manager_service:service_manager find;

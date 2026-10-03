@@ -1,0 +1,16 @@
+# Goodix fingerprint HAL (android.hardware.biometrics.fingerprint-service.gf),
+# rules from the stock vendor policy.
+type goodix_fingerprint_service, service_manager_type;
+
+allow hal_fingerprint_default goodix_fp_device:chr_file rw_file_perms;
+allow hal_fingerprint_default tee_device:chr_file rw_file_perms;
+allow hal_fingerprint_default uhid_device:chr_file rw_file_perms;
+allow hal_fingerprint_default { vendor_dmabuf_qseecom_heap_device vendor_dmabuf_qseecom_ta_heap_device }:chr_file r_file_perms;
+allow hal_fingerprint_default self:netlink_socket create_socket_perms_no_ioctl;
+allow hal_fingerprint_default self:capability2 wake_alarm;
+
+
+set_prop(hal_fingerprint_default, vendor_fp_prop)
+
+add_service(hal_fingerprint_default, goodix_fingerprint_service)
+allow system_app goodix_fingerprint_service:service_manager find;

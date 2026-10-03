@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Profiles of the stock DAX tuning (vendor/etc/dolby/dax-default.xml):
+         0 Dynamic, 1 Movie, 2 Music, 3 Voice, 8 Game. The stock Lenovo UI offers
+         0 (smart), 1 (movie) and 2 (music). -->
+    <string-array name="dolby_profile_entries" translatable="false">
+        <item>Dynamic</item>
+        <item>Movie/Video</item>
+        <item>Music</item>
+        <item>Voice</item>
+        <item>Game</item>
+    </string-array>
+
+    <string-array name="dolby_profile_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>8</item>
+    </string-array>
+
+    <!-- The stock DAX tuning defines the IEQ presets as 1 = detailed, 2 = balanced,
+         3 = warm (the stock Lenovo UI shows them as bright, balanced, mild). The app
+         lists its entries as off, balanced, warm, detailed, so map each entry to the
+         matching DAX preset id. -->
+    <string-array name="dolby_ieq_values" translatable="false">
+        <item>0</item>
+        <item>2</item>
+        <item>3</item>
+        <item>1</item>
+    </string-array>
+
+    <!-- Dialogue enhancer amount is 0-16 (the stock Lenovo slider range); the stock
+         defaults are 4 (Dynamic, Music, Game) and 8 (Voice). -->
+    <string-array name="dolby_dialogue_values" translatable="false">
+        <item>0</item>
+        <item>4</item>
+        <item>8</item>
+        <item>12</item>
+        <item>16</item>
+    </string-array>
+
+    <!-- Stereo widening amount is 0-64; the stock default is 35. -->
+    <string-array name="dolby_stereo_values" translatable="false">
+        <item>16</item>
+        <item>35</item>
+        <item>50</item>
+        <item>64</item>
+    </string-array>
+</resources>

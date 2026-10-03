@@ -1,0 +1,47 @@
+# Audio
+aaudio.hw_burst_min_usec=2000
+aaudio.mmap_exclusive_policy=2
+aaudio.mmap_policy=2
+af.fast_track_multiplier=1
+audio.deep_buffer.media=true
+audio.offload.min.duration.secs=30
+audio.offload.video=true
+audio.sys.mute.latency.factor=2
+audio.sys.noisy.broadcast.delay=500
+audio.sys.offload.pstimeout.secs=3
+audio.sys.routing.latency=0
+audio.timecheck.timeout_duration_ms=8000
+media.stagefright.audio.deep=false
+ro.af.client_heap_size_kbyte=7168
+
+# Bluetooth (stock product profile set; without hid.host the Lenovo pen
+# HID/HOGP link and bas.client battery reporting are disabled)
+bluetooth.device_id.vendor_id=0x001D
+bluetooth.profile.a2dp.source.enabled=true
+bluetooth.profile.avrcp.controller.enabled=true
+bluetooth.profile.avrcp.target.enabled=true
+bluetooth.profile.bas.client.enabled=true
+bluetooth.profile.gatt.enabled=true
+bluetooth.profile.hfp.ag.enabled=true
+bluetooth.profile.hid.device.enabled=false
+bluetooth.profile.hid.host.enabled=true
+bluetooth.profile.map.server.enabled=true
+bluetooth.profile.opp.enabled=true
+bluetooth.profile.pan.nap.enabled=true
+bluetooth.profile.pan.panu.enabled=true
+bluetooth.profile.pbap.server.enabled=true
+
+# Window manager
+persist.wm.extensions.enabled=true
+
+# Audio properties outside the vendor namespace (vendor_init may not set them
+# from vendor.prop under enforcing SELinux)
+ro.mediaserver.64b.enable=true
+ro.qc.sdk.audio.fluencetype=none
+persist.audio.fluence.voicerec=false
+persist.audio.fluence.speaker=true
+audio.sys.offload.pstimeout.secs=3
+persist.audio.fluence.voicecomm=true
+
+# Boot animation in landscape (the panel's natural orientation is portrait)
+ro.bootanim.set_orientation_logical_0=ORIENTATION_90

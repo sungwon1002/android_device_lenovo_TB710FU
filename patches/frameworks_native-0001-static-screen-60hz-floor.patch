@@ -1,0 +1,44 @@
+From: TB520FU <tb520fu@localhost>
+Subject: [PATCH] RefreshRateSelector: 60 Hz floor for a static screen
+
+With content detection, layers that update rarely vote Min, and when all
+layers vote Min the selector picked the policy minimum (30 Hz on the
+TB520FU), so the screen only switched between 30 Hz and 120 Hz (touch).
+Pick the lowest mode of at least 60 Hz for that case instead. The idle
+timer (no frames at all) still drops to the policy minimum, which gives the
+stock ZUI "smart refresh rate" steps: 30 Hz idle, 60 Hz static, up to
+120 Hz for touch and animations.
+
+---
+diff --git a/services/surfaceflinger/Scheduler/RefreshRateSelector.cpp b/services/surfaceflinger/Scheduler/RefreshRateSelector.cpp
+index 0b11899..5390bac 100644
+--- a/services/surfaceflinger/Scheduler/RefreshRateSelector.cpp
++++ b/services/surfaceflinger/Scheduler/RefreshRateSelector.cpp
+@@ -824,11 +824,23 @@ auto RefreshRateSelector::getRankedFrameRatesLocked(const std::vector<LayerRequi
+     // Only if all layers want Min we should return Min
+     if (noVoteLayers + minVoteLayers == layers.size()) {
+         ALOGV("All layers Min");
++        const auto minPredicate = [&](const FrameRateMode& mode) {
++            return !smoothSwitchOnly || mode.modePtr->getId() == activeModeId;
++        };
++        // A static screen that still draws now and then stays at the lowest
++        // rate of at least 60 Hz. The idle timer (no frames at all) still drops
++        // to the policy minimum, which gives 30 -> 60 -> 120 Hz steps.
++        std::optional<DisplayModeId> staticModeOpt;
++        for (const auto& mode : mPrimaryFrameRates) {
++            using namespace fps_approx_ops;
++            if (mode.modePtr->getGroup() == activeMode.getGroup() && mode.fps >= 60_Hz &&
++                mode.fps == mode.modePtr->getPeakFps() && minPredicate(mode)) {
++                staticModeOpt = mode.modePtr->getId();
++                break;
++            }
++        }
+         const auto ranking = rankFrameRates(activeMode.getGroup(), RefreshRateOrder::Ascending,
+-                                            std::nullopt, [&](FrameRateMode mode) {
+-                                                return !smoothSwitchOnly ||
+-                                                        mode.modePtr->getId() == activeModeId;
+-                                            });
++                                            staticModeOpt, minPredicate);
+         SFTRACE_FORMAT_INSTANT("%s (All layers Min)",
+                                to_string(ranking.front().frameRateMode.fps).c_str());
+         return {ranking, kNoSignals};

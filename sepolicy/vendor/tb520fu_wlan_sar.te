@@ -1,0 +1,15 @@
+# setwlansardsi*.sh: WLAN SAR power limits through vendor_cmd_tool (nl80211
+# vendor commands), started by init for tb520fu-input (WifiSarController)
+type tb520fu_wlan_sar, domain;
+type tb520fu_wlan_sar_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(tb520fu_wlan_sar)
+
+allow tb520fu_wlan_sar vendor_shell_exec:file rx_file_perms;
+allow tb520fu_wlan_sar vendor_toolbox_exec:file rx_file_perms;
+allow tb520fu_wlan_sar tb520fu_wlan_sar_exec:file rx_file_perms;
+allow tb520fu_wlan_sar vendor_configs_file:file r_file_perms;
+
+allow tb520fu_wlan_sar self:capability { net_admin net_raw };
+allow tb520fu_wlan_sar self:netlink_generic_socket create_socket_perms_no_ioctl;
+allow tb520fu_wlan_sar self:udp_socket create_socket_perms;
+allowxperm tb520fu_wlan_sar self:udp_socket ioctl { SIOCGIFINDEX SIOCGIFFLAGS };

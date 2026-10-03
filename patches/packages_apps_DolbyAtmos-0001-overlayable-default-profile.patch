@@ -1,0 +1,41 @@
+diff --git a/res/values/config.xml b/res/values/config.xml
+index 5abe781..7c82157 100644
+--- a/res/values/config.xml
++++ b/res/values/config.xml
+@@ -8,4 +8,7 @@
+     <!-- Whether stereo widening levels are supported -->
+     <bool name="dolby_stereo_widening_supported">true</bool>
+ 
++    <!-- Profile used until the user picks one (dolby_profile_values) -->
++    <string name="dolby_default_profile" translatable="false">0</string>
++
+ </resources>
+diff --git a/res/xml/dolby_settings.xml b/res/xml/dolby_settings.xml
+index e43c97a..bbfb096 100644
+--- a/res/xml/dolby_settings.xml
++++ b/res/xml/dolby_settings.xml
+@@ -16,7 +16,7 @@
+         android:key="dolby_profile"
+         android:entries="@array/dolby_profile_entries"
+         android:entryValues="@array/dolby_profile_values"
+-        android:defaultValue="0"
++        android:defaultValue="@string/dolby_default_profile"
+         android:title="@string/dolby_profile_title"
+         android:summary="%s"
+         android:icon="@drawable/ic_dolby" />
+diff --git a/src/co/aospa/dolby/DolbyController.kt b/src/co/aospa/dolby/DolbyController.kt
+index 3de6478..cad676f 100644
+--- a/src/co/aospa/dolby/DolbyController.kt
++++ b/src/co/aospa/dolby/DolbyController.kt
+@@ -164,7 +164,10 @@ internal class DolbyController private constructor(private val context: Context)
+     private fun setCurrentProfile() {
+         dlog(TAG, "setCurrentProfile")
+         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+-        profile = prefs.getString(DolbyConstants.PREF_PROFILE, "0" /*dynamic*/)!!.toInt()
++        profile = prefs.getString(
++            DolbyConstants.PREF_PROFILE,
++            context.getString(R.string.dolby_default_profile),
++        )!!.toInt()
+     }
+ 
+     fun setDsOnAndPersist(dsOn: Boolean) {

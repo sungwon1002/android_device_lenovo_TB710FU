@@ -1,0 +1,19 @@
+//
+// SPDX-FileCopyrightText: 2026 The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+// Lenovo pen / keyboard / battery bridge running inside system_server.
+// Loaded by PhoneWindowManager as a DeviceKeyHandler
+// (config_deviceKeyHandlerLibs/Classes). Most of the logic is ported from
+// the stock ZUI services.jar (com.zui.server.input, com.lenovo.lgsi.server
+// .battery), see NOTICE.
+//
+
+java_library {
+    name: "tb520fu-input",
+
+    srcs: ["src/**/*.java"],
+    platform_apis: true,
+    system_ext_specific: true,
+    installable: true,
+}

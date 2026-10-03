@@ -1,0 +1,404 @@
+//
+// Copyright (C) 2026 The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+prebuilt_etc {
+    name: "fstab.qcom",
+    src: "fstab.qcom",
+    vendor: true,
+    vendor_ramdisk_available: true,
+}
+
+prebuilt_etc {
+    name: "ueventd.qcom.rc",
+    filename: "ueventd.rc",
+    src: "ueventd.qcom.rc",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.qcom.factory.rc",
+    src: "init.qcom.factory.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.qcom.rc",
+    src: "init.qcom.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.qcom.usb.rc",
+    src: "init.qcom.usb.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.qti.kernel.rc",
+    src: "init.qti.kernel.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.qti.ufs.rc",
+    src: "init.qti.ufs.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.target.rc",
+    src: "init.target.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+sh_binary {
+    name: "early_eth.sh",
+    src: "early_eth.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.class_main.sh",
+    src: "init.class_main.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.crda.sh",
+    src: "init.crda.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.early_boot-memory.sh",
+    src: "init.kernel.early_boot-memory.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-cliffs.sh",
+    src: "init.kernel.post_boot-cliffs.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-cliffs_2_2_1.sh",
+    src: "init.kernel.post_boot-cliffs_2_2_1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-cliffs_2_3_0.sh",
+    src: "init.kernel.post_boot-cliffs_2_3_0.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-cliffs_3_3_1.sh",
+    src: "init.kernel.post_boot-cliffs_3_3_1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-cliffs_default_3_4_1.sh",
+    src: "init.kernel.post_boot-cliffs_default_3_4_1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-memory.sh",
+    src: "init.kernel.post_boot-memory.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-pineapple.sh",
+    src: "init.kernel.post_boot-pineapple.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-pineapple_1_2_2_1.sh",
+    src: "init.kernel.post_boot-pineapple_1_2_2_1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-pineapple_1_3_1_1.sh",
+    src: "init.kernel.post_boot-pineapple_1_3_1_1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-pineapple_2_2_2_0.sh",
+    src: "init.kernel.post_boot-pineapple_2_2_2_0.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-pineapple_2_3_1_1.sh",
+    src: "init.kernel.post_boot-pineapple_2_3_1_1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-pineapple_2_3_2_0.sh",
+    src: "init.kernel.post_boot-pineapple_2_3_2_0.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot-pineapple_default_2_3_2_1.sh",
+    src: "init.kernel.post_boot-pineapple_default_2_3_2_1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.kernel.post_boot.sh",
+    src: "init.kernel.post_boot.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.mdm.sh",
+    src: "init.mdm.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.class_core.sh",
+    src: "init.qcom.class_core.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.coex.sh",
+    src: "init.qcom.coex.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.early_boot.sh",
+    src: "init.qcom.early_boot.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.efs.sync.sh",
+    src: "init.qcom.efs.sync.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.post_boot.sh",
+    src: "init.qcom.post_boot.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.sdio.sh",
+    src: "init.qcom.sdio.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.sensors.sh",
+    src: "init.qcom.sensors.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.sh",
+    src: "init.qcom.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.usb.sh",
+    src: "init.qcom.usb.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.graphics.sh",
+    src: "init.qti.graphics.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.kernel.debug-cliffs.sh",
+    src: "init.qti.kernel.debug-cliffs.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.kernel.debug-pineapple.sh",
+    src: "init.qti.kernel.debug-pineapple.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.kernel.debug.sh",
+    src: "init.qti.kernel.debug.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.kernel.early_debug-pineapple.sh",
+    src: "init.qti.kernel.early_debug-pineapple.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.kernel.early_debug.sh",
+    src: "init.qti.kernel.early_debug.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.kernel.sh",
+    src: "init.qti.kernel.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.media.sh",
+    src: "init.qti.media.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.qcv.sh",
+    src: "init.qti.qcv.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qti.write.sh",
+    src: "init.qti.write.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qvrd.usb_mtu_set.sh",
+    src: "init.qvrd.usb_mtu_set.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.xrcommd.usb_mtu_set.sh",
+    src: "init.xrcommd.usb_mtu_set.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "setwlansardsi0.sh",
+    src: "setwlansardsi0.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "setwlansardsi1.sh",
+    src: "setwlansardsi1.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "setwlansardsi2.sh",
+    src: "setwlansardsi2.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "setwlansardsi3.sh",
+    src: "setwlansardsi3.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "setwlansardsi4.sh",
+    src: "setwlansardsi4.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "system_dlkm_modprobe.sh",
+    src: "system_dlkm_modprobe.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "vendor_modprobe.sh",
+    src: "vendor_modprobe.sh",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.tb520fu.zram.rc",
+    src: "init.tb520fu.zram.rc",
+    sub_dir: "init",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.zram.0",
+    src: "fstab.zram.0",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.zram.2",
+    src: "fstab.zram.2",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.zram.4",
+    src: "fstab.zram.4",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.zram.6",
+    src: "fstab.zram.6",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.zram.8",
+    src: "fstab.zram.8",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.zram.12",
+    src: "fstab.zram.12",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.zram.16",
+    src: "fstab.zram.16",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.tb520fu.region.sh",
+    src: "init.tb520fu.region.sh",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.tb520fu.region.rc",
+    src: "init.tb520fu.region.rc",
+    sub_dir: "init",
+    vendor: true,
+}

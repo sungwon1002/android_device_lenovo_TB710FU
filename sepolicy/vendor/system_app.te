@@ -1,0 +1,10 @@
+# TB710FUParts: memory extension status (/sys/block/zram0/backing_dev and
+# bd_stat, size of the backing loop device)
+allow system_app sysfs_zram:dir search;
+allow system_app sysfs_zram:file r_file_perms;
+allow system_app sysfs_loop:dir search;
+allow system_app sysfs_loop:file r_file_perms;
+
+# TB710FUParts: battery cycles and health (/sys/class/qcom-battery/fg1_soh)
+allow system_app vendor_sysfs_battery_supply:dir r_dir_perms;
+allow system_app vendor_sysfs_battery_supply:file r_file_perms;

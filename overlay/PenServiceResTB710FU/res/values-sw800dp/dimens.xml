@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- The pane of a 2944px wide tablet still reports sw800dp (smallest width
+     is the height), which used to pick the largest pen image. -->
+<resources>
+    <dimen name="battery_pen_width">300dp</dimen>
+</resources>
