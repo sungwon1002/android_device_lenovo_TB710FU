@@ -164,8 +164,8 @@
          below 50 lux neutral, above 1000 lux 7500K. Without a mapping AOSP shows the
          ambient CCT itself, which made indoor light very yellow. -->
     <bool name="config_displayWhiteBalanceAvailable">true</bool>
-    <!-- On by default (after a factory reset), like the stock natural color -->
-    <bool name="config_displayWhiteBalanceEnabledDefault">true</bool>
+    <!-- Off by default (user request): display white balance auto value disabled -->
+    <bool name="config_displayWhiteBalanceEnabledDefault">false</bool>
     <string name="config_displayWhiteBalanceColorTemperatureSensorName" translatable="false">qti.sensor.rgb</string>
     <integer name="config_displayWhiteBalanceColorTemperatureMin">5800</integer>
     <integer name="config_displayWhiteBalanceColorTemperatureMax">9500</integer>
