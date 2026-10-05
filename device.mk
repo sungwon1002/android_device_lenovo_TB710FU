@@ -132,6 +132,9 @@ PRODUCT_PACKAGES += \
 # Enforce generic ramdisk allow list
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
+# Dolby Atmos UI (PixelOS packages/apps/DolbyAtmos; DAX3 blobs from stock)
+PRODUCT_PACKAGES += \
+    DolbyAtmos
 
 # Device settings (parts/)
 PRODUCT_PACKAGES += \
