@@ -101,6 +101,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_VENDOR_PROPERTIES += \
     ro.carrier=wifi-only
 
+# WiFi default country code (WiFi-only device, no SIM/telephony to derive it).
+# WifiCountryCode.getOemDefaultCountryCode() reads ro.boot.wificountrycode;
+# without it the regulatory domain falls back to "00"/world and 5GHz is empty.
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.boot.wificountrycode=KR
+
 # Dalvik
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
