@@ -1,0 +1,8 @@
+# Platform-domain denials observed on device (2026-10-05).
+# Coredomain types, so these live in plat-private (not vendor).
+
+# Bluetooth RFCOMM kernel thread (krfcommd) binds a privileged channel.
+allow kernel self:capability net_bind_service;
+
+# adbd cleanup probe, harmless
+dontaudit toolbox adb_data_file:dir search;
