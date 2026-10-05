@@ -17,6 +17,8 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.InputDevice;
+import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
 
 /**
@@ -24,14 +26,21 @@ import android.view.WindowManagerGlobal;
  * folio cover turns the screen off and locks, opening it turns the screen
  * back on.
  *
- * The cover magnet is seen by the ROHM BU52053NVX hall sensor of the sensor
- * HAL (qti.sensor.hall_effect, type 33171002; value 1 = cover away, anything
- * else = cover near). The hall_irq input device of hall_mod.ko never reports
- * events, its two hall sensors only serve the pen charger. As on stock, a
- * near event alone is not trusted: the ambient light sensor has to confirm
- * that the screen is covered (at most config_light_sensor_min_value, 20 lux,
- * on stock) before the screen goes off, so a magnet near the back or a
- * keyboard folded behind the tablet does not turn the screen off.
+ * TB710FU: the cover magnet is seen by hall_detect.ko (dt node hall_switch,
+ * qcom,hall_detect, hall,gpio_irq1). Its "hall_irq" input device reports
+ * scan code 252 (HALL_NEAR, cover close) and 253 (HALL_FAR, cover away) as
+ * key presses; stock maps them to the ZUI keycodes 751/750 that
+ * ZuiPhoneWindowManager turns into lid switch events. AOSP has no such
+ * keycodes, so without a key layout they arrive as KEYCODE_UNKNOWN with the
+ * scan code and are matched by device name and scan code here. The ADSP of
+ * TB710FU has no hall effect sensor driver (unlike TB520FU, which uses
+ * qti.sensor.hall_effect); that path is kept as a fallback.
+ *
+ * As on stock, a near event alone is not trusted: the ambient light sensor
+ * has to confirm that the screen is covered (at most
+ * config_light_sensor_min_value, 20 lux, on stock) before the screen goes
+ * off, so a magnet near the back or a keyboard folded behind the tablet does
+ * not turn the screen off.
  *
  * Stock setting: Settings.System zui_lid_enable, unset means on.
  */
@@ -40,6 +49,9 @@ final class FolioCover {
 
     static final String SETTING = "zui_lid_enable";
     private static final int TYPE_HALL = 33171002;
+    private static final String HALL_DEVICE = "hall_irq";
+    private static final int SCAN_NEAR = 252;
+    private static final int SCAN_FAR = 253;
     private static final float COVERED_MAX_LUX = 20f;
 
     private final Context mContext;
@@ -47,8 +59,12 @@ final class FolioCover {
     private SensorManager mSensors;
     private Sensor mLight;
     private boolean mLightRegistered;
-    /** The screen was turned off by the cover; opening it wakes the screen. */
-    private boolean mSleptByCover;
+    /**
+     * The cover was closed on a dark screen: either the cover turned it off,
+     * or it was already off (power key, double tap to sleep, timeout) when
+     * the cover was closed. Opening the cover then wakes the screen.
+     */
+    private boolean mWakeOnOpen;
 
     private final SensorEventListener mHallListener = new SensorEventListener() {
         @Override
@@ -77,13 +93,26 @@ final class FolioCover {
         mHandler = handler;
     }
 
+    /** Called on the input policy thread; must stay cheap. */
+    boolean handle(KeyEvent event) {
+        int scan = event.getScanCode();
+        if (scan != SCAN_NEAR && scan != SCAN_FAR) return false;
+        InputDevice device = event.getDevice();
+        if (device == null || !HALL_DEVICE.equals(device.getName())) return false;
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+            boolean away = scan == SCAN_FAR;
+            Safe.post(mHandler, "folio hall key", () -> onHall(away));
+        }
+        return true;
+    }
+
     void start() {
         mSensors = mContext.getSystemService(SensorManager.class);
         // The wake-up variant also reports while the screen is off.
         Sensor hall = mSensors.getDefaultSensor(TYPE_HALL, true);
         mLight = mSensors.getDefaultSensor(Sensor.TYPE_LIGHT);
         if (hall == null) {
-            Log.w(TAG, "no hall effect sensor, folio case mode unavailable");
+            Log.i(TAG, "no hall effect sensor, using " + HALL_DEVICE + " keys");
             return;
         }
         mSensors.registerListener(mHallListener, hall, SensorManager.SENSOR_DELAY_NORMAL,
@@ -96,14 +125,19 @@ final class FolioCover {
         PowerManager pm = mContext.getSystemService(PowerManager.class);
         if (away) {
             unregisterLight();
-            if (mSleptByCover && enabled() && !pm.isInteractive()) {
+            if (mWakeOnOpen && enabled() && !pm.isInteractive()) {
                 pm.wakeUp(SystemClock.uptimeMillis(), PowerManager.WAKE_REASON_LID,
                         "tb520fu:folio");
             }
-            mSleptByCover = false;
+            mWakeOnOpen = false;
             return;
         }
-        if (!enabled() || !pm.isInteractive()) return;
+        if (!enabled()) return;
+        if (!pm.isInteractive()) {
+            // Closed on a screen that is already off: opening wakes it.
+            mWakeOnOpen = true;
+            return;
+        }
         if (mLight == null) {
             coverClosed(pm);
         } else if (!mLightRegistered) {
@@ -124,7 +158,7 @@ final class FolioCover {
 
     private void coverClosed(PowerManager pm) {
         Log.i(TAG, "cover closed, screen off");
-        mSleptByCover = true;
+        mWakeOnOpen = true;
         pm.goToSleep(SystemClock.uptimeMillis(), PowerManager.GO_TO_SLEEP_REASON_LID_SWITCH, 0);
         // Stock: "turn the screen off and lock automatically".
         try {
