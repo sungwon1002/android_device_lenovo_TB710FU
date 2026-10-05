@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Device-specific key handlers. PhoneWindowManager reads these from
+         lineageos.platform (lineage-sdk), NOT android. Keep the default
+         LineageParts gesture handler and add the Lenovo pen/keyboard/folio
+         bridge (tb520fu-input / InputCore), which also starts FolioCover. -->
+    <string-array name="config_deviceKeyHandlerLibs" translatable="false">
+        <item>/system_ext/priv-app/LineageParts/LineageParts.apk</item>
+        <item>/system_ext/framework/tb520fu-input.jar</item>
+    </string-array>
+    <string-array name="config_deviceKeyHandlerClasses" translatable="false">
+        <item>org.lineageos.lineageparts.gestures.KeyHandler</item>
+        <item>com.tb520fu.input.KeyHandler</item>
+    </string-array>
+</resources>

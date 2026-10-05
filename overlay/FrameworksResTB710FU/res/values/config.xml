@@ -214,12 +214,6 @@
 
     <!-- Lenovo pen / keyboard / battery bridge (input/), loaded into
          system_server by PhoneWindowManager -->
-    <string-array name="config_deviceKeyHandlerLibs" translatable="false">
-        <item>/system_ext/framework/tb520fu-input.jar</item>
-    </string-array>
-    <string-array name="config_deviceKeyHandlerClasses" translatable="false">
-        <item>com.tb520fu.input.KeyHandler</item>
-    </string-array>
 
     <!-- Apps offered for Lenovo pen writing haptics, stock list (ZUI_17.5.10.362).
          Needs patches/frameworks_base-0001 (defines the array). -->

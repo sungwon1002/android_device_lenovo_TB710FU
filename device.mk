@@ -278,6 +278,7 @@ PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_PACKAGES += \
     DolbyAtmosResTB710FU \
     FrameworksResTB710FU \
+    LineageSdkResTB710FU \
     PenServiceResTB710FU \
     SettingsProviderResTB710FU \
     SettingsResTB710FU \
