@@ -138,9 +138,11 @@ PRODUCT_PACKAGES += \
 # Enforce generic ramdisk allow list
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
-# Dolby Atmos UI (PixelOS packages/apps/DolbyAtmos; DAX3 blobs from stock)
+# Dolby Atmos UI (LunarisDolby, Material You; dolby/LunarisDolby; DAX3 blobs from
+# stock). Talks to the stock Lenovo DAX3 effect over the standard DAP CPDP
+# protocol (effect UUID 9d4921da-...), same backend the old PixelOS app used.
 PRODUCT_PACKAGES += \
-    DolbyAtmos
+    LunarisDolby
 
 # Device settings (parts/)
 PRODUCT_PACKAGES += \
@@ -285,7 +287,7 @@ PRODUCT_PACKAGES += \
 # Overlays
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_PACKAGES += \
-    DolbyAtmosResTB710FU \
+    LunarisDolbyResTB710FU \
     FrameworksResTB710FU \
     LineageSdkResTB710FU \
     PenServiceResTB710FU \

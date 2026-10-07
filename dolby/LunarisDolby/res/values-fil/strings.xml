@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2023-25 Paranoid Android
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+
+    <!-- Dolby Atmos -->
+    <string name="dolby_title">Dolby Atmos</string>
+    <string name="dolby_enable">I-on ang Dolby Atmos</string>
+    <string name="dolby_profile_title">Pumili ng profile</string>
+    <string name="dolby_preset">Equalizer</string>
+    <string name="dolby_off">Off</string>
+    <string name="dolby_on">On</string>
+    <string name="dolby_low">Mababa</string>
+    <string name="dolby_medium">Middle</string>
+    <string name="dolby_high">Mataas</string>
+    <string name="dolby_max">Max</string>
+    <string name="dolby_unknown">Hindi kilala</string>
+    <string name="dolby_on_with_profile">On (%1$s)</string>
+    <string name="dolby_category_settings">Audio tuning</string>
+    <string name="dolby_category_adv_settings">Advanced settings</string>
+    <string name="dolby_adv_settings_footer">Pumili ng ibang profile para makita ang advanced settings.</string>
+    <string name="dolby_bass_enhancer">Bass enhancer</string>
+    <string name="dolby_bass_level">Bass level</string>
+    <string name="dolby_bass_curve">Bass curve</string>
+    <string name="dolby_bass_curve_balanced">Balanced</string>
+    <string name="dolby_bass_curve_sub_boost">Sub boost</string>
+    <string name="dolby_bass_curve_punch">Punch</string>
+    <string name="dolby_treble_enhancer">Treble enhancer</string>
+    <string name="dolby_treble_level">Treble level</string>
+    <string name="dolby_dialogue_enhancer">Dialogue enhancer</string>
+    <string name="dolby_spk_virtualizer">Speaker surround virtualizer</string>
+    <string name="dolby_hp_virtualizer">Headphone surround virtualizer</string>
+    <string name="dolby_volume_leveler">Volume leveler</string>
+    <string name="dolby_bass_enhancer_summary">Nagbo-boost ng mababang tunog para mas malalim ang bass</string>
+    <string name="dolby_treble_enhancer_summary">Nagbo-boost ng mataas na tunog para mas malinaw ang treble</string>
+    <string name="dolby_dialogue_enhancer_summary">Pinapalinaw ang boses at dialogue sa audio</string>
+    <string name="dolby_spk_virtualizer_summary">Gumagawa ng virtual surround sound sa speakers</string>
+    <string name="dolby_hp_virtualizer_summary">Gumagawa ng virtual surround sound sa headphones</string>
+    <string name="dolby_volume_leveler_summary">Nino-normalize ang volume para consistent ang pakikinig</string>
+    <string name="dolby_connect_headphones">I-connect ang headphones</string>
+    <string name="dolby_reset_all">I-reset lahat ng profile</string>
+    <string name="dolby_reset_all_message">Ire-reset nito ang lahat ng profile pabalik sa factory defaults.</string>
+    <string name="dolby_reset_all_toast">Na-reset na lahat ng profile</string>
+    <string name="dolby_hp_virtualizer_dolby_strength">Surround virtualizer strength</string>
+    <string name="dolby_dialogue_enhancer_dolby_strength">Dialogue enhancer strength</string>
+    <string name="dolby_notification_listener_label">Dolby Atmos Service</string>
+    <string name="loading">Loading...</string>
+
+    <!-- Dolby profiles -->
+    <string name="dolby_profile_dynamic">Dynamic</string>
+    <string name="dolby_profile_video">Movie/Video</string>
+    <string name="dolby_profile_music">Music</string>
+    <string name="dolby_profile_game">Game</string>
+    <string name="dolby_profile_work">Work</string>
+    <string name="dolby_profile_casual">Casual</string>
+    <string name="dolby_profile_mood">Mood</string>
+
+    <!-- Dolby equalizer presets -->
+    <string name="dolby_preset_default">Flat (off)</string>
+    <string name="dolby_preset_rock">Rock</string>
+    <string name="dolby_preset_jazz">Jazz</string>
+    <string name="dolby_preset_pop">Pop</string>
+    <string name="dolby_preset_classical">Classical</string>
+    <string name="dolby_preset_hiphop">Hip Hop</string>
+    <string name="dolby_preset_blues">Blues</string>
+    <string name="dolby_preset_electronic">Electronic</string>
+    <string name="dolby_preset_country">Country</string>
+    <string name="dolby_preset_dance">Dance</string>
+    <string name="dolby_preset_metal">Metal</string>
+    <string name="dolby_preset_acoustic">Acoustic</string>
+    <string name="dolby_preset_bass">Bass Boost</string>
+    <string name="dolby_preset_beats">Beats</string>
+    <string name="dolby_preset_clear">Crystal Clear</string>
+    <string name="dolby_preset_deep">Deep</string>
+    <string name="dolby_preset_dubstep">Dubstep</string>
+    <string name="dolby_preset_hardstyle">Hardstyle</string>
+    <string name="dolby_preset_movie">Movie</string>
+    <string name="dolby_preset_rb">R&amp;B</string>
+    <string name="dolby_preset_vocal">Vocal Booster</string>
+    <string name="dolby_preset_custom">Custom</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="advanced">Advanced</string>
+    <string name="home">Home</string>
+
+    <!-- Dolby equalizer UI -->
+    <string name="dolby_geq_slider_label_gain">Gain</string>
+    <string name="dolby_geq_preset">Preset</string>
+    <string name="dolby_geq_preset_name">Pangalan ng preset</string>
+    <string name="dolby_geq_new_preset">Bagong preset</string>
+    <string name="dolby_geq_rename_preset">Palitan ang pangalan ng preset</string>
+    <string name="dolby_geq_delete_preset">Burahin ang preset</string>
+    <string name="dolby_geq_delete_preset_prompt">Gusto mo bang burahin ang preset na ito?</string>
+    <string name="dolby_geq_reset_gains">I-reset ang gains</string>
+    <string name="dolby_geq_reset_gains_prompt">Gusto mo bang i-reset ang preset na ito sa default?</string>
+    <string name="dolby_geq_preset_name_exists">May existing na na preset na may ganyang pangalan!</string>
+    <string name="dolby_geq_preset_name_too_long">Masyadong mahaba ang pangalan ng preset!</string>
+    <string name="band_mode_mismatch">Hindi match ang Band Mode</string>
+    <string name="frequency_response">Frequency Response</string>
+    <string name="locked">Naka-lock</string>
+    <string name="band_configuration">Band Configuration</string>
+    <string name="choose_equalizer_precision">Piliin kung gaano ka-precise ang equalizer: mas maraming band = mas fine-tuned</string>
+
+    <!-- Dolby intelligent EQ -->
+    <string name="dolby_ieq">Intelligent equalizer</string>
+    <string name="dolby_balanced">Balanced</string>
+    <string name="dolby_warm">Warm</string>
+    <string name="dolby_detailed">Detailed</string>
+
+    <!-- Per-App Audio Profiles -->
+    <string name="app_profiles_title">Per-App Audio Profiles</string>
+    <string name="app_profiles_desc">Mag-assign ng iba\'t ibang audio profile sa bawat app para mas maganda ang tunog depende sa content</string>
+    <string name="app_profiles_search_hint">Maghanap ng app...</string>
+    <string name="app_profiles_no_apps">Walang app na nahanap</string>
+    <string name="app_profiles_loading">Naglo-load ng mga app...</string>
+    <string name="app_profiles_clear_all">I-clear lahat ng App Profile</string>
+    <string name="app_profiles_clear_all_message">Matatanggal nito ang lahat ng naka-assign na profile. Default profile na lang ang gagamitin ng mga app.</string>
+    <string name="app_profiles_manage">I-manage ang App Profiles</string>
+    <string name="app_profiles_default">Default</string>
+    <string name="app_profiles_assigned">Naka-assign: %1$s</string>
+    <string name="app_profiles_headphone_only">Headphone/BT only mode</string>
+    <string name="app_profiles_headphone_only_description">Magpapalit lang ng profile kapag may nakakonektang earphones o Bluetooth audio device</string>
+    <string name="app_profiles_permission_required">Kailangan ng Permission</string>
+    <string name="app_profiles_permission_required_details">Para ma-auto-switch ang profile base sa app na ginagamit mo, i-grant ang Usage Access permission sa susunod na screen.</string>
+    <string name="app_profiles_grant_permission">I-grant ang Permission</string>
+    <string name="app_profiles_search_placeholder">Maghanap ng app...</string>
+    <string name="app_profiles_no_apps_found">Walang app na nahanap</string>
+    <string name="app_profiles_retry">Subukan ulit</string>
+    <string name="app_profiles_change">Palitan</string>
+    <string name="app_profiles_auto_switch">Auto-switch ng profile</string>
+    <string name="app_profiles_show_toasts">Ipakita ang mga toast</string>
+
+    <!-- Preset Import/Export -->
+    <string name="preset_import_export">I-import/Export ang Preset</string>
+    <string name="preset_export_single">I-export ang Preset</string>
+    <string name="preset_import_single">Mag-import ng Preset</string>
+    <string name="preset_export_batch">I-export lahat ng Preset</string>
+    <string name="preset_import_batch">Mag-import ng maraming Preset</string>
+    <string name="preset_copy_clipboard">I-copy sa Clipboard</string>
+    <string name="preset_paste_clipboard">I-paste mula sa Clipboard</string>
+    <string name="preset_share">I-share ang Preset</string>
+    <string name="preset_export_success">Na-export na ang preset</string>
+    <string name="preset_import_success">Na-import na ang preset</string>
+    <string name="preset_export_failed">Hindi na-export</string>
+    <string name="preset_import_failed">Hindi na-import</string>
+
+    <!-- Notification Access -->
+    <string name="notification_access_required">Kailangan ng Notification Access</string>
+    <string name="notification_access_required_desc">I-enable ang notification access para manatiling gumagana ang Dolby Atmos sa background at para mag-auto-switch ng profile.</string>
+    <string name="enable_notification_access">I-enable ang Notification Access</string>
+    <string name="enable_notification_access_desc">I-enable ang notification access para manatiling gumagana ang Dolby Atmos sa background at para mag-auto-switch ng profile.</string>
+    <string name="notification_access_permission_details">Pinapayagan ng permission na ito ang Dolby Atmos na:\n\n• Manatiling naka-run sa background\n• Mag-auto-switch ng audio profile\n• Makita kung anong app ang ginagamit mo\n\nHindi nito mababasa o mababago ang iyong mga notipikasyon.</string>
+    <string name="open_settings">Buksan ang Settings</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- import export -->
+    <string name="import_export_presets">I-import/Export ang Preset</string>
+    <string name="import_presets">Mag-import ng Preset</string>
+    <string name="import_presets_description">Mag-import ng mga preset mula sa files o clipboard</string>
+    <string name="import_single_file">Single File</string>
+    <string name="import_batch">Batch</string>
+    <string name="import_from_clipboard">Mula sa Clipboard</string>
+    <string name="your_custom_presets">Iyong mga Custom Preset</string>
+    <string name="processing">Pinoproseso...</string>
+    <string name="batch_export">Batch Export</string>
+    <string name="batch_export_description">I-export ang lahat ng %1$s custom preset sa isang file?</string>
+    <string name="export_all">I-export Lahat</string>
+
+    <!-- Dolby mid enhancer -->
+    <string name="dolby_mid_enhancer">Mid enhancer</string>
+    <string name="dolby_mid_level">Mid level</string>
+    <string name="dolby_mid_enhancer_summary">Nagbo-boost ng mid-frequency na tunog para mas malinaw ang vocals at instruments</string>
+
+</resources>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2023-25 Paranoid Android
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+
+    <!-- Dolby Atmos -->
+    <string name="dolby_title">Dolby Atmos</string>
+    <string name="dolby_enable">Sử dụng Dolby Atmos</string>
+    <string name="dolby_profile_title">Chọn cấu hình</string>
+    <string name="dolby_preset">Bộ cân bằng âm</string>
+    <string name="dolby_off">Tắt</string>
+    <string name="dolby_on">Bật</string>
+    <string name="dolby_low">Thấp</string>
+    <string name="dolby_medium">Trung bình</string>
+    <string name="dolby_high">Cao</string>
+    <string name="dolby_max">Tối đa</string>
+    <string name="dolby_unknown">Không xác định</string>
+    <string name="dolby_on_with_profile">Bật (%1$s)</string>
+    <string name="dolby_category_settings">Tinh chỉnh âm thanh</string>
+    <string name="dolby_category_adv_settings">Cài đặt nâng cao</string>
+    <string name="dolby_adv_settings_footer">Chọn cấu hình khác để hiển thị cài đặt nâng cao.</string>
+    <string name="dolby_bass_enhancer">Tăng cường âm trầm</string>
+    <string name="dolby_bass_level">Mức âm trầm</string>
+    <string name="dolby_bass_curve">Đường cong âm trầm</string>
+    <string name="dolby_bass_curve_balanced">Cân bằng</string>
+    <string name="dolby_bass_curve_sub_boost">Tăng sub</string>
+    <string name="dolby_bass_curve_punch">Mạnh</string>
+
+    <string name="dolby_treble_enhancer">Tăng cường âm cao</string>
+    <string name="dolby_treble_level">Mức âm cao</string>
+    <string name="dolby_dialogue_enhancer">Tăng cường hội thoại</string>
+    <string name="dolby_spk_virtualizer">Giả lập âm thanh vòm cho loa</string>
+    <string name="dolby_hp_virtualizer">Giả lập âm thanh vòm cho tai nghe</string>
+    <string name="dolby_volume_leveler">Cân bằng âm lượng</string>
+    <string name="dolby_bass_enhancer_summary">Tăng cường âm tần thấp cho âm bass sâu hơn</string>
+    <string name="dolby_treble_enhancer_summary">Tăng cường âm tần cao cho âm thanh rõ nét hơn</string>
+    <string name="dolby_dialogue_enhancer_summary">Cải thiện độ rõ của giọng nói và hội thoại</string>
+    <string name="dolby_spk_virtualizer_summary">Tạo hiệu ứng âm thanh vòm ảo trên loa</string>
+    <string name="dolby_hp_virtualizer_summary">Tạo hiệu ứng âm thanh vòm ảo trên tai nghe</string>
+    <string name="dolby_volume_leveler_summary">Cân bằng âm lượng để mang lại trải nghiệm nghe ổn định</string>
+
+    <string name="dolby_connect_headphones">Kết nối tai nghe</string>
+    <string name="dolby_reset_all">Đặt lại cấu hình</string>
+    <string name="dolby_reset_all_message">Thao tác này sẽ đặt lại tất cả cấu hình về mặc định.</string>
+    <string name="dolby_reset_all_toast">Đã đặt lại tất cả cấu hình thành công</string>
+    <string name="dolby_hp_virtualizer_dolby_strength">Mức giả lập âm thanh vòm</string>
+    <string name="dolby_dialogue_enhancer_dolby_strength">Mức tăng cường hội thoại</string>
+    <string name="dolby_notification_listener_label">Dịch vụ Dolby Atmos</string>
+    <string name="loading">Đang tải...</string>
+
+    <!-- Dolby profiles -->
+    <string name="dolby_profile_dynamic">Động</string>
+    <string name="dolby_profile_video">Phim/Video</string>
+    <string name="dolby_profile_music">Nhạc</string>
+    <string name="dolby_profile_game">Trò chơi</string>
+    <string name="dolby_profile_work">Làm việc</string>
+    <string name="dolby_profile_casual">Thông thường</string>
+    <string name="dolby_profile_mood">Tâm trạng</string>
+
+    <!-- Dolby equalizer presets -->
+    <string name="dolby_preset_default">Phẳng (tắt)</string>
+    <string name="dolby_preset_rock">Rock</string>
+    <string name="dolby_preset_jazz">Jazz</string>
+    <string name="dolby_preset_pop">Pop</string>
+    <string name="dolby_preset_classical">Cổ điển</string>
+    <string name="dolby_preset_hiphop">Hip Hop</string>
+    <string name="dolby_preset_blues">Blues</string>
+    <string name="dolby_preset_electronic">Điện tử</string>
+    <string name="dolby_preset_country">Country</string>
+    <string name="dolby_preset_dance">Dance</string>
+    <string name="dolby_preset_metal">Metal</string>
+    <string name="dolby_preset_acoustic">Acoustic</string>
+    <string name="dolby_preset_bass">Tăng cường âm trầm</string>
+    <string name="dolby_preset_beats">Beats</string>
+    <string name="dolby_preset_clear">Trong trẻo</string>
+    <string name="dolby_preset_deep">Sâu</string>
+    <string name="dolby_preset_dubstep">Dubstep</string>
+    <string name="dolby_preset_hardstyle">Hardstyle</string>
+    <string name="dolby_preset_movie">Phim</string>
+    <string name="dolby_preset_rb">R&amp;B</string>
+    <string name="dolby_preset_vocal">Tăng cường giọng hát</string>
+    <string name="dolby_preset_custom">Tùy chỉnh</string>
+    <string name="equalizer">Bộ cân bằng</string>
+    <string name="advanced">Nâng cao</string>
+    <string name="home">Trang chủ</string>
+
+    <!-- Dolby equalizer UI -->
+    <string name="dolby_geq_slider_label_gain">Độ khuếch đại</string>
+    <string name="dolby_geq_preset">Cấu hình sẵn</string>
+    <string name="dolby_geq_preset_name">Tên cấu hình</string>
+    <string name="dolby_geq_new_preset">Cấu hình mới</string>
+    <string name="dolby_geq_rename_preset">Đổi tên cấu hình</string>
+    <string name="dolby_geq_delete_preset">Xóa cấu hình</string>
+    <string name="dolby_geq_delete_preset_prompt">Bạn có muốn xóa cấu hình này không?</string>
+    <string name="dolby_geq_reset_gains">Đặt lại mức</string>
+    <string name="dolby_geq_reset_gains_prompt">Bạn có muốn đặt lại cấu hình này về mặc định không?</string>
+    <string name="dolby_geq_preset_name_exists">Tên cấu hình đã tồn tại!</string>
+    <string name="dolby_geq_preset_name_too_long">Tên cấu hình quá dài!</string>
+    <string name="band_mode_mismatch">Không khớp chế độ dải tần</string>
+    <string name="frequency_response">Đáp ứng tần số</string>
+    <string name="locked">Đã khóa</string>
+    <string name="band_configuration">Cấu hình dải tần</string>
+    <string name="choose_equalizer_precision">Chọn độ chi tiết bộ cân bằng: nhiều dải hơn = kiểm soát tốt hơn</string>
+
+    <!-- Dolby intelligent EQ -->
+    <string name="dolby_ieq">Bộ cân bằng thông minh</string>
+    <string name="dolby_balanced">Cân bằng</string>
+    <string name="dolby_warm">Ấm</string>
+    <string name="dolby_detailed">Chi tiết</string>
+
+    <!-- Per-App Audio Profiles -->
+    <string name="app_profiles_title">Hồ sơ âm thanh theo ứng dụng</string>
+    <string name="app_profiles_desc">Gán cấu hình âm thanh khác nhau cho từng ứng dụng</string>
+    <string name="app_profiles_search_hint">Tìm ứng dụng...</string>
+    <string name="app_profiles_no_apps">Không tìm thấy ứng dụng</string>
+    <string name="app_profiles_loading">Đang tải ứng dụng...</string>
+    <string name="app_profiles_clear_all">Xóa tất cả hồ sơ ứng dụng</string>
+    <string name="app_profiles_clear_all_message">Thao tác này sẽ xóa toàn bộ cấu hình âm thanh theo ứng dụng.</string>
+    <string name="app_profiles_manage">Quản lý hồ sơ ứng dụng</string>
+    <string name="app_profiles_default">Mặc định</string>
+    <string name="app_profiles_assigned">Đã gán: %1$s</string>
+
+    <string name="app_profiles_headphone_only">Chỉ tai nghe / Bluetooth</string>
+    <string name="app_profiles_headphone_only_description">Chỉ tự động chuyển cấu hình khi có tai nghe hoặc thiết bị Bluetooth</string>
+
+    <string name="app_profiles_permission_required">Cần cấp quyền</string>
+    <string name="app_profiles_permission_required_details">Để tự động chuyển cấu hình theo ứng dụng đang chạy, hãy cấp quyền Truy cập sử dụng.</string>
+    <string name="app_profiles_grant_permission">Cấp quyền</string>
+
+    <string name="app_profiles_search_placeholder">Tìm ứng dụng...</string>
+    <string name="app_profiles_no_apps_found">Không tìm thấy ứng dụng</string>
+    <string name="app_profiles_retry">Thử lại</string>
+    <string name="app_profiles_change">Thay đổi</string>
+    <string name="app_profiles_auto_switch">Tự động chuyển cấu hình</string>
+    <string name="app_profiles_show_toasts">Hiển thị thông báo</string>
+
+    <!-- Preset Import/Export -->
+    <string name="preset_import_export">Nhập/Xuất cấu hình</string>
+    <string name="preset_export_single">Xuất cấu hình</string>
+    <string name="preset_import_single">Nhập cấu hình</string>
+    <string name="preset_export_batch">Xuất tất cả cấu hình</string>
+    <string name="preset_import_batch">Nhập nhiều cấu hình</string>
+    <string name="preset_copy_clipboard">Sao chép vào bộ nhớ tạm</string>
+    <string name="preset_paste_clipboard">Dán từ bộ nhớ tạm</string>
+    <string name="preset_share">Chia sẻ cấu hình</string>
+    <string name="preset_export_success">Xuất cấu hình thành công</string>
+    <string name="preset_import_success">Nhập cấu hình thành công</string>
+    <string name="preset_export_failed">Xuất cấu hình thất bại</string>
+    <string name="preset_import_failed">Nhập cấu hình thất bại</string>
+
+    <!-- Notification Access -->
+    <string name="notification_access_required">Cần quyền thông báo</string>
+    <string name="notification_access_required_desc">Bật quyền thông báo để Dolby Atmos chạy nền và tự động chuyển cấu hình.</string>
+    <string name="enable_notification_access">Bật quyền thông báo</string>
+    <string name="enable_notification_access_desc">Cho phép Dolby Atmos chạy nền và tự động chuyển cấu hình.</string>
+
+    <string name="notification_access_permission_details">
+        Quyền này cho phép Dolby Atmos:\n
+        • Chạy liên tục trong nền\n
+        • Tự động chuyển cấu hình âm thanh\n
+        • Theo dõi ứng dụng đang hoạt động\n\n
+        Thông báo của bạn sẽ không bị đọc hay thay đổi.
+    </string>
+
+    <string name="open_settings">Mở cài đặt</string>
+    <string name="cancel">Hủy</string>
+
+    <!--import export -->
+    <string name="import_export_presets">Nhập/Xuất cấu hình</string>
+    <string name="import_presets">Nhập cấu hình</string>
+    <string name="import_presets_description">Nhập cấu hình từ tệp hoặc bộ nhớ tạm</string>
+    <string name="import_single_file">Tệp đơn</string>
+    <string name="import_batch">Hàng loạt</string>
+    <string name="import_from_clipboard">Từ bộ nhớ tạm</string>
+    <string name="your_custom_presets">Cấu hình tùy chỉnh của bạn</string>
+    <string name="processing">Đang xử lý...</string>
+    <string name="batch_export">Xuất hàng loạt</string>
+    <string name="batch_export_description">Xuất tất cả %1$s cấu hình tùy chỉnh vào một tệp?</string>
+    <string name="export_all">Xuất tất cả</string>
+
+    <!-- Dolby mid enhancer -->
+    <string name="dolby_mid_enhancer">Tăng cường âm trung</string>
+    <string name="dolby_mid_level">Mức âm trung</string>
+    <string name="dolby_mid_enhancer_summary">Cải thiện độ rõ của giọng hát và nhạc cụ bằng cách tăng cường dải tần trung</string>
+
+</resources>

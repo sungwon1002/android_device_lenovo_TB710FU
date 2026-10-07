@@ -1,0 +1,4 @@
+runtime_resource_overlay {
+    name: "LunarisDolbyResTB710FU",
+    product_specific: true,
+}

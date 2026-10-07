@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Match the stock Lenovo DAX slider ranges. Stereo widening is 0-64
+         (stock default 35); dialogue enhancer is 0-16 (stock defaults 4, and
+         8 for Voice). Upstream defaults (4-64 / 1-12) clip the stock range. -->
+    <integer name="stereo_widening_min">0</integer>
+    <integer name="stereo_widening_max">64</integer>
+
+    <integer name="dialogue_enhancer_min">0</integer>
+    <integer name="dialogue_enhancer_max">16</integer>
+</resources>

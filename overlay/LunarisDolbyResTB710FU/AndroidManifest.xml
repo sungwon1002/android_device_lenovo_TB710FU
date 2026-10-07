@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.lunaris.dolby.overlay.tb710fu">
+    <overlay android:targetPackage="org.lunaris.dolby"
+             android:isStatic="true"
+             android:priority="700" />
+</manifest>
