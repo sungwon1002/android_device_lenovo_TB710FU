@@ -292,6 +292,7 @@ PRODUCT_PACKAGES += \
     SettingsProviderResTB710FU \
     SettingsResTB710FU \
     SystemUIResTB710FU \
+    UpdaterResTB710FU \
     WifiResTB710FU \
     ZuiUDeviceResTB710FU
 

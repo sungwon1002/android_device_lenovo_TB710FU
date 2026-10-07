@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Point the Updater at our own OTA repo instead of the official
+         Evolution-X one. {device} is replaced with the codename (TB710FU). -->
+    <string name="updater_server_url" translatable="false">https://raw.githubusercontent.com/sungwon1002/TB710FU_EVOX_OTA/main/builds/{device}.json</string>
+</resources>
