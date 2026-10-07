@@ -5,6 +5,10 @@
 -->
 <resources>
     <!-- Point the Updater at our own OTA repo instead of the official
-         Evolution-X one. {device} is replaced with the codename (TB710FU). -->
-    <string name="updater_server_url" translatable="false">https://raw.githubusercontent.com/sungwon1002/TB710FU_EVOX_OTA/main/builds/{device}.json</string>
+         Evolution-X one. The codename is hardcoded rather than using the
+         Updater's {device} placeholder: that placeholder is filled from
+         ro.evolution.device, which SuSFS hiding strips out of build.prop,
+         leaving an empty device and a .../builds/.json 404. Hardcoding keeps
+         OTA working regardless of what prop hiding does. -->
+    <string name="updater_server_url" translatable="false">https://raw.githubusercontent.com/sungwon1002/TB710FU_EVOX_OTA/main/builds/TB710FU.json</string>
 </resources>
