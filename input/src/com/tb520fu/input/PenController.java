@@ -511,6 +511,16 @@ final class PenController implements PenGatt.Listener {
             case Intent.ACTION_SCREEN_OFF:
                 mScreenOn = Intent.ACTION_SCREEN_ON.equals(action);
                 writePenGsensorFlag();
+                // The touch panel falls back to finger mode across a
+                // suspend/resume, but the pen stays HID-connected so
+                // onPenConnected() (which arms pen mode) is not called again.
+                // Re-arm it on screen on while a pen is connected, otherwise
+                // the panel treats the stylus as finger input and emits
+                // phantom strokes at offset coordinates.
+                if (mScreenOn && mConnected.connectState == BluetoothProfile.STATE_CONNECTED
+                        && !TextUtils.isEmpty(mConnected.mac)) {
+                    LenovoHal.setPenMode(true);
+                }
                 break;
         }
     }
