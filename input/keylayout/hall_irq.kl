@@ -1,0 +1,11 @@
+# Folio cover hall sensor.
+#
+# TB710FU's cover magnet is read by hall_detect.ko, whose "hall_irq" input
+# device reports scan code 252 (HALL_NEAR, cover closed) and 253 (HALL_FAR,
+# cover open) as EV_KEY presses. It advertises SW_LID but never emits it, so
+# the native lid path cannot be used. Map the keys to the power keycodes so
+# PhoneWindowManager turns the screen off when the cover closes and back on
+# when it opens.
+
+key 252   SLEEP
+key 253   WAKEUP            WAKE

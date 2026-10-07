@@ -162,7 +162,11 @@ public final class InputCore {
     /** Called on the input dispatcher's policy thread; must stay cheap. */
     boolean handleKey(KeyEvent event) {
         if (!mStarted) return false;
-        if (mPenKeys.handle(event) || mKeyboard.handle(event) || mFolio.handle(event)) {
+        // Folio cover keys (hall_irq scan 252/253) are mapped to SLEEP/WAKEUP
+        // by keylayout/hall_irq.kl and handled natively, so they must not be
+        // consumed here (consuming would stop the power keycode from reaching
+        // PhoneWindowManager).
+        if (mPenKeys.handle(event) || mKeyboard.handle(event)) {
             return true;
         }
         return mExtension != null && mExtension.handleKey(event);
