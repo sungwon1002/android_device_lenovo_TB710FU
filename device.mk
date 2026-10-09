@@ -162,10 +162,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     ZuiGameHelper
 
+# libgame_enhance / libgamepoweroptfeature / libswgamedap are already shipped
+# by the extracted vendor blobs; only libMotionEngine is missing.
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libgame_enhance.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libgame_enhance.so \
-    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libgamepoweroptfeature.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libgamepoweroptfeature.so \
-    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libswgamedap.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libswgamedap.so \
     $(LOCAL_PATH)/lenovo/GameHelper/blobs/libMotionEngine.so:$(TARGET_COPY_OUT_SYSTEM)/lib64/libMotionEngine.so
 
 # Device settings (parts/)
