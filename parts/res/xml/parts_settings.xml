@@ -136,4 +136,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="apps"
+        android:title="@string/apps_category">
+
+        <Preference
+            android:key="model_spoof"
+            android:title="@string/model_spoof_title"
+            android:summary="@string/model_spoof_summary"
+            android:fragment="com.tb520fu.parts.ModelSpoofFragment" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -87,6 +87,11 @@ apply_patch frameworks/base \
 #       Defines config_tb520fu_patch_desktop_opt_out so TB710FUParts can detect it.
 apply_patch frameworks/base \
     "$PATCHES/frameworks_base-0004-keyboard-desktop-first-opt-out.patch"
+# 0005: Per-app Build.MODEL spoofing (Settings.Secure per_app_model_spoof,
+#       applied by PixelPropsUtils per app) + disable the PIF/Pixel spoofing
+#       by default (not needed on TB710FU). TB710FUParts configures it.
+apply_patch frameworks/base \
+    "$PATCHES/frameworks_base-0005-per-app-model-spoof-and-disable-pif.patch"
 # frameworks/native
 # 0001: RefreshRateSelector: a static screen (all layers vote Min) goes to the
 #       lowest mode of at least 60 Hz, not the policy minimum; the idle timer

@@ -1,0 +1,114 @@
+diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
+index f8d405c2dc1a..e451aeabbebb 100644
+--- a/core/java/android/provider/Settings.java
++++ b/core/java/android/provider/Settings.java
+@@ -14835,6 +14835,16 @@ public final class Settings {
+         @Readable
+         public static final String PI_PP_SPOOF = "pi_pp_spoof";
+ 
++        /**
++         * Per-app Build.MODEL spoofing, configured in the device settings.
++         * A ';'-separated list of "package=model" entries; applied by
++         * PixelPropsUtils at each app's startup. Readable so the hook can read
++         * it from every app process.
++         * @hide
++         */
++        @Readable
++        public static final String PER_APP_MODEL_SPOOF = "per_app_model_spoof";
++
+         /**
+          * Whether to use Tensor spoof for google apps
+          * @hide
+diff --git a/core/java/com/android/internal/util/evolution/PixelPropsUtils.java b/core/java/com/android/internal/util/evolution/PixelPropsUtils.java
+index 7cf3f34cb9b2..dab97dbb71ab 100644
+--- a/core/java/com/android/internal/util/evolution/PixelPropsUtils.java
++++ b/core/java/com/android/internal/util/evolution/PixelPropsUtils.java
+@@ -72,6 +72,11 @@ public final class PixelPropsUtils {
+     private static final String PI_PP_TARGETS_KEY = "pi_pp_targets";
+     private static final String PI_PP_MODEL_KEY   = "pi_pp_model";
+ 
++    // User-configurable per-app Build.MODEL spoofing (Settings). Value is a
++    // ';'-separated list of "package=model" entries.
++    private static final String PER_APP_MODEL_KEY = "per_app_model_spoof";
++    private static volatile Map<String, String> sPerAppModel;
++
+     private static final String TAG = PixelPropsUtils.class.getSimpleName();
+     private static final boolean DEBUG = false;
+ 
+@@ -125,9 +130,10 @@ public final class PixelPropsUtils {
+ 
+     private static final boolean sIsMainlineDevice = detectMainlinePixelDevice();
+ 
+-    private static volatile boolean sPhotosSpoofEnabled = true;
++    // PIF / Pixel-props spoofing is disabled by default on TB710FU (not needed).
++    private static volatile boolean sPhotosSpoofEnabled = false;
+     private static volatile boolean sSnapchatSpoofEnabled = false;
+-    private static volatile boolean sPixelPropsSpoofEnabled = true;
++    private static volatile boolean sPixelPropsSpoofEnabled = false;
+     private static volatile boolean sInitialized = false;
+     private static volatile Set<String> sPpTargets = null;
+     private static volatile String sPpModel = null;
+@@ -188,11 +194,11 @@ public final class PixelPropsUtils {
+         final Runnable refresh = () -> {
+             try {
+                 sPhotosSpoofEnabled = Settings.Secure.getInt(
+-                        cr, Settings.Secure.PI_PHOTOS_SPOOF, 1) == 1;
++                        cr, Settings.Secure.PI_PHOTOS_SPOOF, 0) == 1;
+                 sSnapchatSpoofEnabled = Settings.Secure.getInt(
+                         cr, Settings.Secure.PI_SNAPCHAT_SPOOF, 0) == 1;
+                 sPixelPropsSpoofEnabled = Settings.Secure.getInt(
+-                        cr, Settings.Secure.PI_PP_SPOOF, 1) == 1;
++                        cr, Settings.Secure.PI_PP_SPOOF, 0) == 1;
+                 final String rawTargets = Settings.Secure.getString(cr, PI_PP_TARGETS_KEY);
+                 sPpTargets = (rawTargets == null || rawTargets.isEmpty())
+                         ? new ArraySet<>(PixelDeviceRepository.DEFAULT_PP_TARGETS)
+@@ -244,6 +250,39 @@ public final class PixelPropsUtils {
+         }
+     }
+ 
++    /**
++     * User-configurable per-app Build.MODEL spoofing. Settings.Secure
++     * "per_app_model_spoof" holds a ';'-separated list of "package=model"
++     * entries; an app in the list reports the given model. Parsed once per
++     * process; apps are restarted to pick up changes.
++     */
++    private static void applyPerAppModelSpoof(Context context, String packageName) {
++        try {
++            if (sPerAppModel == null) {
++                final Map<String, String> map = new HashMap<>();
++                final String raw = Settings.Secure.getString(
++                        context.getContentResolver(), PER_APP_MODEL_KEY);
++                if (raw != null && !raw.isEmpty()) {
++                    for (String entry : raw.split(";")) {
++                        final int eq = entry.indexOf('=');
++                        if (eq > 0 && eq < entry.length() - 1) {
++                            map.put(entry.substring(0, eq).trim(),
++                                    entry.substring(eq + 1).trim());
++                        }
++                    }
++                }
++                sPerAppModel = map;
++            }
++            final String model = sPerAppModel.get(packageName);
++            if (model != null && !model.isEmpty()) {
++                setPropValue("MODEL", model);
++                if (DEBUG) Log.d(TAG, "per-app MODEL spoof: " + packageName + " -> " + model);
++            }
++        } catch (Throwable t) {
++            // Never break app startup over spoofing.
++        }
++    }
++
+     public static void setProps(Context context) {
+         if (Process.isIsolated()) {
+             if (DEBUG) Log.d(TAG, "Skipping setProps in isolated process");
+@@ -265,6 +304,9 @@ public final class PixelPropsUtils {
+ 
+         propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
+ 
++        // User-configured per-app Build.MODEL spoofing (independent of PIF).
++        applyPerAppModelSpoof(context, packageName);
++
+         sIsExcluded = isGoogleCameraPackage(packageName);
+ 
+         final Set<String> ppTargets;

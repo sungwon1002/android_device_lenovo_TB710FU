@@ -56,4 +56,15 @@
         <item>Search</item>
         <item>Settings</item>
     </string-array>
+
+    <!-- Per-app model spoofing -->
+    <string name="apps_category">Apps</string>
+    <string name="model_spoof_title">Per-app model name</string>
+    <string name="model_spoof_summary">Report a different device model to selected apps</string>
+    <string name="model_spoof_entries">Apps</string>
+    <string name="model_spoof_add">Add app</string>
+    <string name="model_spoof_set">Model name</string>
+    <string name="model_spoof_hint">e.g. SM-X910</string>
+    <string name="model_spoof_edit">Change model name</string>
+    <string name="model_spoof_remove">Remove</string>
 </resources>
