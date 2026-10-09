@@ -101,6 +101,18 @@ PRODUCT_COPY_FILES += \
 PRODUCT_VENDOR_PROPERTIES += \
     ro.carrier=wifi-only
 
+# Performance tuning from the stock CN (내수) ROM (ZUI 17.5, TB710FU_CN). The
+# vendor perfmgr configs are already the stock ones; these are the extra perf
+# props the stock build.prop sets that a clean AOSP build drops.
+PRODUCT_VENDOR_PROPERTIES += \
+    vendor.perf.framepacing.enable=1 \
+    ro.surface_flinger.game_default_frame_rate_override=60
+
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.config.lgsi.input_fling.boost_velocity=100 \
+    ro.config.lgsi.input_scroll.boost_distance=100 \
+    dalvik.vm.dexopt.thermal-cutoff=2
+
 # WiFi default country code (WiFi-only device, no SIM/telephony to derive it).
 # WifiCountryCode.getOemDefaultCountryCode() reads ro.boot.wificountrycode;
 # without it the regulatory domain falls back to "00"/world and 5GHz is empty.
