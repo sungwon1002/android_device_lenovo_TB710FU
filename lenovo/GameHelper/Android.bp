@@ -26,3 +26,15 @@ prebuilt_etc {
     sub_dir: "permissions",
     system_ext_specific: true,
 }
+
+cc_prebuilt_library_shared {
+    name: "libMotionEngine",
+    owner: "lenovo",
+    srcs: ["blobs/libMotionEngine.so"],
+    compile_multilib: "64",
+    check_elf_files: false,
+    strip: {
+        none: true,
+    },
+    prefer: true,
+}

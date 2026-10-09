@@ -159,13 +159,12 @@ PRODUCT_PACKAGES += \
 # Lenovo game assistant (ZuiGameHelper, com.zui.game.service) + its game
 # booster backend libs, from the stock CN ROM. Provides the in-game toolbox
 # (performance, bypass charging, etc.).
-PRODUCT_PACKAGES += \
-    ZuiGameHelper
-
 # libgame_enhance / libgamepoweroptfeature / libswgamedap are already shipped
-# by the extracted vendor blobs; only libMotionEngine is missing.
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libMotionEngine.so:$(TARGET_COPY_OUT_SYSTEM)/lib64/libMotionEngine.so
+# by the extracted vendor blobs; only libMotionEngine is missing (declared as a
+# cc_prebuilt_library_shared in lenovo/GameHelper/Android.bp).
+PRODUCT_PACKAGES += \
+    ZuiGameHelper \
+    libMotionEngine
 
 # Device settings (parts/)
 PRODUCT_PACKAGES += \
