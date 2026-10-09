@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+     Privileged permissions for the Lenovo game assistant (ZuiGameHelper).
+-->
+<permissions>
+    <privapp-permissions package="com.zui.game.service">
+        <permission name="android.permission.BATTERY_STATS" />
+        <permission name="android.permission.CHANGE_CONFIGURATION" />
+        <permission name="android.permission.CHANGE_NETWORK_STATE" />
+        <permission name="android.permission.CHANGE_WIFI_STATE" />
+        <permission name="android.permission.CONNECTIVITY_INTERNAL" />
+        <permission name="android.permission.DUMP" />
+        <permission name="android.permission.EXPAND_STATUS_BAR" />
+        <permission name="android.permission.GET_TASKS" />
+        <permission name="android.permission.INJECT_EVENTS" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+        <permission name="android.permission.MODIFY_AUDIO_SETTINGS" />
+        <permission name="android.permission.MODIFY_PHONE_STATE" />
+        <permission name="android.permission.MONITOR_INPUT" />
+        <permission name="android.permission.STATUS_BAR" />
+        <permission name="android.permission.WRITE_SECURE_SETTINGS" />
+        <permission name="android.permission.WRITE_SETTINGS" />
+    </privapp-permissions>
+</permissions>

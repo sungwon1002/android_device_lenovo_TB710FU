@@ -156,6 +156,18 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 PRODUCT_PACKAGES += \
     LunarisDolby
 
+# Lenovo game assistant (ZuiGameHelper, com.zui.game.service) + its game
+# booster backend libs, from the stock CN ROM. Provides the in-game toolbox
+# (performance, bypass charging, etc.).
+PRODUCT_PACKAGES += \
+    ZuiGameHelper
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libgame_enhance.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libgame_enhance.so \
+    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libgamepoweroptfeature.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libgamepoweroptfeature.so \
+    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libswgamedap.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libswgamedap.so \
+    $(LOCAL_PATH)/lenovo/GameHelper/blobs/libMotionEngine.so:$(TARGET_COPY_OUT_SYSTEM)/lib64/libMotionEngine.so
+
 # Device settings (parts/)
 PRODUCT_PACKAGES += \
     TB710FUParts
