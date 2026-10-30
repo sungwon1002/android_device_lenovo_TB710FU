@@ -83,6 +83,12 @@
             app:updatesContinuously="false"
             android:persistent="false" />
 
+        <Preference
+            android:key="memc"
+            android:title="@string/memc_title"
+            android:summary="@string/memc_summary"
+            android:fragment="com.tb520fu.parts.MemcFragment" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

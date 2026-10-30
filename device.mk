@@ -162,8 +162,14 @@ PRODUCT_PACKAGES += \
 # libgame_enhance / libgamepoweroptfeature / libswgamedap are already shipped
 # by the extracted vendor blobs; only libMotionEngine is missing (declared as a
 # cc_prebuilt_library_shared in lenovo/GameHelper/Android.bp).
+# ZuiCoreService (com.zui.cores) is the system API bridge the helper talks to
+# for the actual boosting (defines INVOKE_SYSTEM_API/USE_CORE_APIS, runs as
+# android.uid.system); ZuiServiceEngine (com.zui.engine) defines the WEB_SERVICE
+# permission the helper requests. Both from the stock CN ROM.
 PRODUCT_PACKAGES += \
     ZuiGameHelper \
+    ZuiCoreService \
+    ZuiServiceEngine \
     libMotionEngine
 
 # Device settings (parts/)

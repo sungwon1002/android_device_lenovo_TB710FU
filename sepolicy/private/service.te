@@ -4,3 +4,6 @@ type zui_pen_haptic_service, app_api_service, system_server_service, service_man
 type zui_notification_service, app_api_service, system_server_service, service_manager_type;
 # Raw keyboard access for the platform-signed firmware updater (stock: same type)
 type zui_keyboard_manager_service, system_server_service, service_manager_type;
+# ZUI mode service (zuimode) in system_server, reconstructed for the stock
+# ZuiGameHelper game assistant (game foreground state callbacks + game list).
+type zuimode_service, app_api_service, system_server_service, service_manager_type;

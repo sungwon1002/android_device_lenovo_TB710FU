@@ -1,0 +1,3 @@
+# zuimode: the stock ZuiGameHelper (platform-signed, priv-app) and the ZUI core
+# service (system uid) bind this to receive game foreground callbacks.
+allow { platform_app priv_app system_app } zuimode_service:service_manager find;

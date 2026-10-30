@@ -1,0 +1,31 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+// Lenovo ZUI service engine (ZuiServiceEngine, com.zui.engine) from the stock
+// CN ROM. It defines com.zui.engine.permission.WEB_SERVICE, which ZuiGameHelper
+// requests. The APK bundles its own native libraries (tensorflow-lite, opencv,
+// pose), which PackageManager extracts on install, so no separate cc_prebuilt
+// is needed.
+
+android_app_import {
+    name: "ZuiServiceEngine",
+    owner: "lenovo",
+    apk: "ZuiServiceEngine.apk",
+    certificate: "platform",
+    dex_preopt: {
+        enabled: false,
+    },
+    privileged: true,
+    system_ext_specific: true,
+    required: [
+        "privapp-permissions-com.zui.engine.xml",
+    ],
+}
+
+prebuilt_etc {
+    name: "privapp-permissions-com.zui.engine.xml",
+    src: "privapp-permissions-com.zui.engine.xml",
+    sub_dir: "permissions",
+    system_ext_specific: true,
+}

@@ -67,4 +67,10 @@
     <string name="model_spoof_hint">e.g. SM-X910</string>
     <string name="model_spoof_edit">Change model name</string>
     <string name="model_spoof_remove">Remove</string>
+
+    <!-- Smooth video motion (MEMC) -->
+    <string name="memc_title">Smooth video motion</string>
+    <string name="memc_summary">Insert extra frames so video in the selected apps looks smoother</string>
+    <string name="memc_add">Add app</string>
+    <string name="memc_entries">Apps</string>
 </resources>
