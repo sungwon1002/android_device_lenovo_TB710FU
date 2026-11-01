@@ -57,7 +57,8 @@ case "$target" in
         case "$soc_hwid" in
             614|632|642|643|700)
                 setprop vendor.media.target_variant "_cliffs_v0"
-                if [ $build_codename -le "16" ]; then
+                # Netflix L1: stock gated bsp_rev to <=16; on 17 it stays empty and Netflix falls back to L3/SD, so extend to 17.
+                if [ $build_codename -le "17" ]; then
                     setprop vendor.netflix.bsp_rev "Q8635-38577-1"
                 fi
                 sku_ver=`cat /sys/devices/platform/soc/aa00000.qcom,vidc/sku_version` 2> /dev/null
@@ -67,7 +68,8 @@ case "$target" in
                 ;;
             *)
                 setprop vendor.media.target_variant "_pineapple"
-                if [ $build_codename -le "16" ]; then
+                # Netflix L1: stock gated bsp_rev to <=16; on 17 it stays empty and Netflix falls back to L3/SD, so extend to 17.
+                if [ $build_codename -le "17" ]; then
                     setprop vendor.netflix.bsp_rev "Q8650-37577-1"
                 fi
                 ;;
