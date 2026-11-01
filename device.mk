@@ -156,21 +156,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 PRODUCT_PACKAGES += \
     LunarisDolby
 
-# Lenovo game assistant (ZuiGameHelper, com.zui.game.service) + its game
-# booster backend libs, from the stock CN ROM. Provides the in-game toolbox
-# (performance, bypass charging, etc.).
-# libgame_enhance / libgamepoweroptfeature / libswgamedap are already shipped
-# by the extracted vendor blobs; only libMotionEngine is missing (declared as a
-# cc_prebuilt_library_shared in lenovo/GameHelper/Android.bp).
-# ZuiCoreService (com.zui.cores) is the system API bridge the helper talks to
-# for the actual boosting (defines INVOKE_SYSTEM_API/USE_CORE_APIS, runs as
-# android.uid.system); ZuiServiceEngine (com.zui.engine) defines the WEB_SERVICE
-# permission the helper requests. Both from the stock CN ROM.
-PRODUCT_PACKAGES += \
-    ZuiGameHelper \
-    ZuiCoreService \
-    ZuiServiceEngine \
-    libMotionEngine
+# 2026-10-31: Lenovo 게임어시스턴트(ZuiGameHelper/ZuiCoreService/ZuiServiceEngine/
+# libMotionEngine) 제거. 게임부스터 작업 중단 → lenovo/{GameHelper,CoreService,
+# ServiceEngine} 디렉토리 및 frameworks/base 게임 통합도 함께 제거.
 
 # Device settings (parts/)
 PRODUCT_PACKAGES += \
